@@ -6,5 +6,6 @@ module.exports = ({ config }) => ({
   extra: {
     ...config.extra,
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY ?? '',
+    pexelsApiKey: process.env.PEXELS_API_KEY ?? '',
   },
 });
