@@ -29,6 +29,8 @@ export interface Post {
   readonly saved: boolean;
   readonly tone: PhotoTone;
   readonly kind: 'photo' | 'reel';
+  /** The real photo, when there is one; the card shows its gradient placeholder until then, or without it. */
+  readonly photoUrl?: string;
 }
 
 export interface Story {
