@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Peludos"><g id="icon"><rect width="512" height="512" rx="120" fill="#1F4FA3"/>
+<path d="M118 196L132 84L226 160Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="24" stroke-linejoin="round"/>
+<path d="M394 196L380 84L286 160Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="24" stroke-linejoin="round"/>
+<path d="M150 150L146 118L184 148Z" fill="#F2A93B"/><path d="M362 150L366 118L328 148Z" fill="#F2A93B"/>
+<path d="M256 436C120 346 92 242 150 196C192 164 240 184 256 224C272 184 320 164 362 196C420 242 392 346 256 436Z" fill="#FFFFFF"/>
+<circle cx="208" cy="268" r="19" fill="#1F4FA3"/><circle cx="304" cy="268" r="19" fill="#1F4FA3"/>
+<path d="M240 312C240 302 248 298 256 298C264 298 272 302 272 312C272 322 264 328 256 336C248 328 240 322 240 312Z" fill="#F2A93B"/></g></svg>
