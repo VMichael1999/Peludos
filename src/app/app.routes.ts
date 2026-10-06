@@ -11,6 +11,7 @@ import { RegisterPage } from './features/auth/register.page.ts';
 import { NotificationsPage } from './features/notifications/notifications.page.ts';
 import { DirectoryPage } from './features/places/directory.page.ts';
 import { StoreDetailPage } from './features/places/store-detail.page.ts';
+import { AppearancePage } from './features/settings/appearance.page.ts';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', component: LaunchPage },
@@ -23,6 +24,7 @@ export const routes: Routes = [
   { path: 'stores', component: DirectoryPage },
   { path: 'store/:id', component: StoreDetailPage },
   { path: 'health/:id', component: HealthPage },
+  { path: 'appearance', component: AppearancePage },
   { path: 'notifications', component: NotificationsPage },
   { path: 'create', component: CreatePostPage },
 ];
