@@ -1,4 +1,6 @@
 import type { Routes } from '@angular/router';
+import { AlertDetailPage } from './features/alerts/alert-detail.page.ts';
+import { ReportAlertPage } from './features/alerts/report-alert.page.ts';
 import { EnableBiometricsPage } from './features/auth/enable-biometrics.page.ts';
 import { LaunchPage } from './features/auth/launch.page.ts';
 import { LoginPage } from './features/auth/login.page.ts';
@@ -11,4 +13,6 @@ export const routes: Routes = [
   { path: 'register', component: RegisterPage },
   { path: 'recover', component: RecoverPage },
   { path: 'enable-biometrics', component: EnableBiometricsPage },
+  { path: 'report', component: ReportAlertPage },
+  { path: 'alert/:id', component: AlertDetailPage },
 ];
