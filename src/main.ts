@@ -9,7 +9,7 @@ import { currentConditions, deviceTokens, watchConditions } from '@ng-native/dev
 import { getFabricUIManager, registerPlatformComponents, styleSheetOf } from '@ng-native/fabric';
 import { loadFonts } from '@ng-native/expo/fonts';
 import { appProviders } from './app/app.providers.ts';
-import { MAPS_API_KEY } from './app/core/config.ts';
+import { LIVE_DATA, MAPS_API_KEY } from './app/core/config.ts';
 import { App } from './app/app.ts';
 
 registerPlatformComponents(Platform.OS);
@@ -22,7 +22,11 @@ AppRegistry.registerRunnable('main', async ({ rootTag }: { rootTag: number | str
   const app = mount(Number(rootTag), App, getFabricUIManager(), {
     // The Google key comes from .env through app.config.js. It is read here, not in the token, so
     // that the tests, which never load this file, run without React Native and without a key.
-    providers: [...appProviders, { provide: MAPS_API_KEY, useValue: String(Constants.expoConfig?.extra?.['googleMapsApiKey'] ?? '') }],
+    providers: [
+      ...appProviders,
+      { provide: MAPS_API_KEY, useValue: String(Constants.expoConfig?.extra?.['googleMapsApiKey'] ?? '') },
+      { provide: LIVE_DATA, useValue: true },
+    ],
     // Colours, as the integers the platform wants.
     processColor,
     // What `@media` resolves against. Without it every media query is false and a responsive
