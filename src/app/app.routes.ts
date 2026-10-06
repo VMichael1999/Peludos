@@ -7,6 +7,7 @@ import { LaunchPage } from './features/auth/launch.page.ts';
 import { LoginPage } from './features/auth/login.page.ts';
 import { RecoverPage } from './features/auth/recover.page.ts';
 import { RegisterPage } from './features/auth/register.page.ts';
+import { NotificationsPage } from './features/notifications/notifications.page.ts';
 import { DirectoryPage } from './features/places/directory.page.ts';
 import { StoreDetailPage } from './features/places/store-detail.page.ts';
 
@@ -21,4 +22,5 @@ export const routes: Routes = [
   { path: 'stores', component: DirectoryPage },
   { path: 'store/:id', component: StoreDetailPage },
   { path: 'health/:id', component: HealthPage },
+  { path: 'notifications', component: NotificationsPage },
 ];
