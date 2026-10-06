@@ -7,12 +7,15 @@ import { AppRegistry, Image, Platform, processColor } from 'react-native';
 import { mount } from '@ng-native/platform';
 import { currentConditions, deviceTokens, watchConditions } from '@ng-native/device';
 import { getFabricUIManager, registerPlatformComponents, styleSheetOf } from '@ng-native/fabric';
+import { registerExpoViews } from '@ng-native/expo';
 import { loadFonts } from '@ng-native/expo/fonts';
 import { appProviders } from './app/app.providers.ts';
-import { LIVE_DATA, MAPS_API_KEY } from './app/core/config.ts';
+import { LIVE_DATA, MAPS_API_KEY, PEXELS_API_KEY } from './app/core/config.ts';
 import { App } from './app/app.ts';
 
 registerPlatformComponents(Platform.OS);
+// `<expo-video>` is the view the reels play their videos in.
+registerExpoViews('expo-video');
 
 AppRegistry.registerRunnable('main', async ({ rootTag }: { rootTag: number | string }) => {
   // The brand font must be registered with the platform before the first layout, or the first
@@ -25,6 +28,7 @@ AppRegistry.registerRunnable('main', async ({ rootTag }: { rootTag: number | str
     providers: [
       ...appProviders,
       { provide: MAPS_API_KEY, useValue: String(Constants.expoConfig?.extra?.['googleMapsApiKey'] ?? '') },
+      { provide: PEXELS_API_KEY, useValue: String(Constants.expoConfig?.extra?.['pexelsApiKey'] ?? '') },
       { provide: LIVE_DATA, useValue: true },
     ],
     // Colours, as the integers the platform wants.
