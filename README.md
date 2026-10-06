@@ -5,7 +5,7 @@ Red social para mascotas: comparte fotos y reels, avisa cuando una mascota se pi
 ![Angular Native](https://img.shields.io/badge/Angular_Native-22-DD0031?logo=angular&logoColor=white)
 ![Expo](https://img.shields.io/badge/Expo_SDK-57-000020?logo=expo&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-80_passing-2EA043)
+![Tests](https://img.shields.io/badge/tests-91_passing-2EA043)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 Está hecha con [Angular Native](https://ng-native.com): componentes de Angular que se dibujan como vistas nativas reales de iOS y Android (no es una web envuelta). Es un prototipo: funciona de punta a punta con datos de ejemplo, y los lugares cercanos pueden venir de Google Places.
