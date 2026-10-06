@@ -15,7 +15,9 @@ import { MockNotificationsRepository } from './data/notifications/mock-notificat
 import { PetsRepository } from './data/pets/pets.repository.ts';
 import { MockPetsRepository } from './data/pets/mock-pets.repository.ts';
 import { FallbackPlacesRepository } from './data/places/fallback-places.repository.ts';
+import { FirstAnswerPlacesRepository } from './data/places/first-answer-places.repository.ts';
 import { GooglePlacesRepository } from './data/places/google-places.repository.ts';
+import { LegacyGooglePlacesRepository } from './data/places/google-places-legacy.repository.ts';
 import { MockPlacesRepository } from './data/places/mock-places.repository.ts';
 import { PlacesRepository } from './data/places/places.repository.ts';
 import { PostsRepository } from './data/posts/posts.repository.ts';
@@ -72,13 +74,17 @@ export const appProviders: (Provider | EnvironmentProviders)[] = [
   provideNativeHttpClient(),
   MockPlacesRepository,
   GooglePlacesRepository,
+  LegacyGooglePlacesRepository,
   {
     // With a Google key: real places, falling back to samples (and saying so) when Google cannot
     // answer. Without one, only samples.
     provide: PlacesRepository,
     useFactory: () =>
       inject(MAPS_API_KEY)
-        ? new FallbackPlacesRepository(inject(GooglePlacesRepository), inject(MockPlacesRepository))
+        ? new FallbackPlacesRepository(
+            new FirstAnswerPlacesRepository([inject(GooglePlacesRepository), inject(LegacyGooglePlacesRepository)]),
+            inject(MockPlacesRepository),
+          )
         : inject(MockPlacesRepository),
   },
   { provide: HealthRepository, useClass: MockHealthRepository },
