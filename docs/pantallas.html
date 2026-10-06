@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peludos — Pantallas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+  :root {
+    --color-bg:#F6F8FC; --color-surface:#FFFFFF; --color-surface-2:#EEF2FA;
+    --color-primary:#1F4FA3; --color-on-primary:#FFFFFF; --color-primary-container:#DCE6F8;
+    --color-accent:#F2A93B; --color-on-accent:#1A1204;
+    --color-text:#0E1626; --color-text-muted:#5B6784; --color-border:#D9E0EE;
+    --color-danger:#C93636; --color-success:#177A4C;
+    --radius-sm:8px; --radius-md:14px; --radius-lg:22px;
+    --font:'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  :root[data-theme="dark"] {
+    --color-bg:#0B1220; --color-surface:#121C30; --color-surface-2:#1A2742;
+    --color-primary:#8DB2F5; --color-on-primary:#0B1220; --color-primary-container:#203A6B;
+    --color-accent:#F5B650; --color-on-accent:#1A1204;
+    --color-text:#E9EFFB; --color-text-muted:#9AA7C4; --color-border:#263553;
+    --color-danger:#FF7A7A; --color-success:#4CC38A;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="dark"]) {
+      --color-bg:#0B1220; --color-surface:#121C30; --color-surface-2:#1A2742;
+      --color-primary:#8DB2F5; --color-on-primary:#0B1220; --color-primary-container:#203A6B;
+      --color-accent:#F5B650; --color-on-accent:#1A1204;
+      --color-text:#E9EFFB; --color-text-muted:#9AA7C4; --color-border:#263553;
+      --color-danger:#FF7A7A; --color-success:#4CC38A;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--color-bg); color:var(--color-text); font-family:var(--font); line-height:1.45; -webkit-font-smoothing:antialiased; }
+  header.top { position:sticky; top:0; z-index:20; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 24px; background:var(--color-surface); border-bottom:1px solid var(--color-border); }
+  header.top strong { font-size:15px; }
+  .seg { display:inline-flex; padding:3px; gap:2px; background:var(--color-surface-2); border-radius:999px; }
+  .seg button { font:600 13px var(--font); color:var(--color-text-muted); background:transparent; border:0; padding:8px 14px; border-radius:999px; cursor:pointer; min-height:36px; }
+  .seg button[aria-pressed="true"] { background:var(--color-primary); color:var(--color-on-primary); }
+  main { max-width:1280px; margin:0 auto; padding:32px 24px 64px; }
+  h1 { font-size:clamp(28px,4.5vw,40px); line-height:1.1; margin:0 0 12px; font-weight:800; letter-spacing:-.02em; max-width:22ch; }
+  h2 { font-size:22px; margin:56px 0 4px; font-weight:800; letter-spacing:-.01em; }
+  .lead, .note { color:var(--color-text-muted); max-width:72ch; margin:0 0 8px; }
+  .note { font-size:14px; }
+  .tablewrap { overflow-x:auto; max-width:900px; }
+  table { border-collapse:collapse; width:100%; max-width:900px; font-size:14px; margin-top:12px; }
+  th,td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--color-border); vertical-align:top; }
+  th { color:var(--color-text-muted); font-weight:600; }
+  td .ic { width:22px; height:22px; vertical-align:middle; color:var(--color-primary); }
+  code { font-size:12.5px; background:var(--color-surface-2); padding:1px 6px; border-radius:6px; }
+
+  .gallery { display:grid; gap:32px 24px; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); margin-top:20px; justify-items:center; }
+  @media (max-width: 420px) { main { padding:24px 8px 48px; } header.top { padding:10px 12px; flex-wrap:wrap; } .gallery { grid-template-columns:1fr; } }
+  figure { margin:0; width:320px; max-width:100%; }
+  figcaption { margin-top:10px; font-size:13.5px; color:var(--color-text-muted); }
+  figcaption b { display:block; color:var(--color-text); font-size:15px; margin-bottom:2px; }
+
+  /* ---- Teléfono ---- */
+  .phone { width:320px; max-width:100%; height:660px; border:1px solid var(--color-border); border-radius:38px; background:var(--color-bg); overflow:hidden; display:flex; flex-direction:column; position:relative; }
+  .sb { display:flex; justify-content:space-between; padding:12px 24px 4px; font-size:12px; font-weight:700; flex:none; }
+  .sb i { display:inline-block; width:22px; height:10px; border:1.5px solid currentColor; border-radius:3px; position:relative; }
+  .sb i::after { content:""; position:absolute; inset:1.5px 5px 1.5px 1.5px; background:currentColor; border-radius:1px; }
+  .screen { flex:1; min-height:0; overflow:hidden; display:flex; flex-direction:column; position:relative; }
+  .ic { width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+  .ib { position:relative; width:38px; height:38px; display:grid; place-items:center; border:0; background:transparent; color:var(--color-text); border-radius:50%; cursor:pointer; padding:0; }
+  .badge { position:absolute; top:3px; right:2px; min-width:16px; height:16px; padding:0 4px; border-radius:8px; background:var(--color-danger); color:#fff; font:700 10px/16px var(--font); text-align:center; }
+  .dot { position:absolute; top:6px; right:6px; width:9px; height:9px; border-radius:50%; background:var(--color-danger); border:2px solid var(--color-surface); }
+  .appbar { display:flex; align-items:center; justify-content:space-between; padding:2px 10px 4px 16px; flex:none; }
+  .appbar .row { display:flex; align-items:center; }
+  .brand { display:flex; align-items:center; gap:8px; font-weight:800; font-size:18px; letter-spacing:-.02em; }
+  .mark { width:30px; height:30px; border-radius:8px; flex:none; display:block; }
+  .mark.xl { width:76px; height:76px; border-radius:20px; }
+  .nav { display:flex; align-items:center; gap:4px; padding:2px 8px 6px; flex:none; }
+  .nav h3 { margin:0; font-size:17px; font-weight:800; flex:1; text-align:center; }
+  .nav .sp { width:38px; }
+  .tabbar { display:flex; justify-content:space-around; align-items:center; padding:6px 4px 14px; background:var(--color-surface); border-top:1px solid var(--color-border); flex:none; }
+  .tab { position:relative; width:52px; height:44px; display:grid; place-items:center; color:var(--color-text-muted); border:0; background:transparent; padding:0; }
+  .tab .ic { width:26px; height:26px; }
+  .tab.on { color:var(--color-primary); }
+  .tab.on .ic { stroke-width:2.4; fill:var(--color-primary-container); }
+  .tab.on::after { content:""; position:absolute; bottom:1px; width:5px; height:5px; border-radius:50%; background:var(--color-primary); }
+  .tab .me { width:28px; height:28px; border-radius:50%; background:var(--color-primary-container); color:var(--color-primary); display:grid; place-items:center; font:800 12px var(--font); box-shadow:0 0 0 2px var(--color-surface), 0 0 0 4px transparent; }
+  .tab.on .me { box-shadow:0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-primary); }
+  .tab .pdot { position:absolute; top:7px; right:10px; width:9px; height:9px; border-radius:50%; background:var(--color-danger); border:2px solid var(--color-surface); }
+
+  .av { width:40px; height:40px; border-radius:50%; background:var(--color-primary-container); color:var(--color-primary); display:grid; place-items:center; font-weight:800; font-size:14px; flex:none; }
+  .av.lg { width:84px; height:84px; font-size:30px; }
+  .av.sm { width:32px; height:32px; font-size:12px; }
+  .ring { box-shadow:0 0 0 2.5px var(--color-bg), 0 0 0 4.5px var(--color-accent); }
+  .btn { font:700 14px var(--font); border:0; border-radius:var(--radius-md); padding:0 18px; min-height:44px; display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; }
+  .btn.primary { background:var(--color-primary); color:var(--color-on-primary); }
+  .btn.accent { background:var(--color-accent); color:var(--color-on-accent); }
+  .btn.ghost { background:transparent; color:var(--color-primary); box-shadow:inset 0 0 0 1.5px var(--color-border); }
+  .btn.block { width:100%; }
+  .btn.danger { background:var(--color-danger); color:#fff; }
+  .btn .ic { width:20px; height:20px; }
+  .chips { display:flex; gap:8px; padding:4px 16px 8px; overflow:hidden; flex:none; }
+  .chip { font:600 12.5px var(--font); padding:7px 13px; border-radius:999px; background:var(--color-surface-2); color:var(--color-text); white-space:nowrap; }
+  .chip.on { background:var(--color-primary); color:var(--color-on-primary); }
+  .muted { color:var(--color-text-muted); }
+  .photo { background:linear-gradient(135deg, var(--color-primary-container), var(--color-surface-2)); display:grid; place-items:center; color:var(--color-text-muted); font-size:11.5px; font-weight:600; }
+  .pad { padding:0 16px; }
+  .card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); }
+  .sec-title { font-size:13px; font-weight:700; color:var(--color-text-muted); padding:12px 16px 6px; margin:0; letter-spacing:.02em; text-transform:uppercase; }
+
+  /* Historias */
+  .stories { display:flex; gap:14px; padding:6px 16px 10px; overflow:hidden; flex:none; }
+  .story { display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11.5px; font-weight:600; width:58px; }
+  .story .av { width:54px; height:54px; }
+  /* Alerta cercana */
+  .alert { margin:4px 14px 10px; padding:10px 12px; border-radius:var(--radius-md); background:var(--color-surface); border:1.5px solid var(--color-danger); display:flex; align-items:center; gap:10px; flex:none; }
+  .alert .ic { color:var(--color-danger); }
+  .alert b { font-size:13.5px; display:block; line-height:1.2; } .alert span { font-size:12px; color:var(--color-text-muted); }
+  .alert .go { margin-left:auto; font:700 12.5px var(--font); color:var(--color-danger); background:transparent; border:0; min-height:40px; padding:0 4px; }
+  /* Publicación */
+  .post { margin:0 14px 12px; flex:none; overflow:hidden; }
+  .post .head { display:flex; align-items:center; gap:10px; padding:10px 12px; }
+  .post .head b { font-size:14px; display:block; line-height:1.15; } .post .head small { font-size:12px; color:var(--color-text-muted); }
+  .post .acts { display:flex; align-items:center; gap:4px; padding:4px 6px 0; }
+  .post .acts .sp { margin-left:auto; }
+  .post .txt { padding:0 14px 12px; font-size:13.5px; }
+
+  /* Reels */
+  .reel { background:#0A0F1A; color:#fff; position:relative; flex:1; min-height:0; display:flex; flex-direction:column; }
+  .reel .vid { position:absolute; inset:0; background:linear-gradient(160deg,#274a86 0%,#12203d 55%,#0A0F1A 100%); display:grid; place-items:center; color:rgba(255,255,255,.55); font-size:12px; font-weight:600; }
+  .reel .scrim { position:absolute; inset:auto 0 0 0; height:55%; background:linear-gradient(to top, rgba(5,8,14,.85), transparent); }
+  .reel .top { position:relative; display:flex; justify-content:space-between; align-items:center; padding:6px 12px; font-weight:800; font-size:18px; z-index:2; }
+  .reel .rail { position:absolute; right:8px; bottom:16px; display:flex; flex-direction:column; align-items:center; gap:14px; z-index:2; font-size:11.5px; font-weight:700; }
+  .reel .rail div { display:flex; flex-direction:column; align-items:center; gap:2px; }
+  .reel .rail .ic { width:28px; height:28px; stroke-width:1.9; }
+  .reel .cap { position:absolute; left:14px; right:70px; bottom:16px; z-index:2; font-size:13px; }
+  .reel .cap b { display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:14px; }
+  .reel .progress { position:absolute; left:0; right:0; bottom:0; height:3px; background:rgba(255,255,255,.25); z-index:3; } .reel .progress i { display:block; width:38%; height:100%; background:#fff; }
+  .tabbar.over { background:#0A0F1A; border-top-color:rgba(255,255,255,.12); }
+  .tabbar.over .tab { color:rgba(255,255,255,.65); } .tabbar.over .tab.on { color:#fff; } .tabbar.over .tab.on .ic { fill:rgba(255,255,255,.2); } .tabbar.over .tab.on::after { background:#fff; }
+  .tabbar.over .tab .me { box-shadow:0 0 0 2px #0A0F1A; }
+
+  /* Buscador / explorar */
+  .search { margin:4px 16px 8px; min-height:44px; border-radius:var(--radius-md); background:var(--color-surface-2); display:flex; align-items:center; gap:10px; padding:0 14px; color:var(--color-text-muted); font-size:14px; flex:none; }
+  .masonry { columns:3; column-gap:4px; padding:0 4px; }
+  .masonry div { break-inside:avoid; margin-bottom:4px; border-radius:6px; }
+  .h1 { height:96px; } .h2 { height:140px; } .h3 { height:70px; } .h4 { height:118px; }
+  .t1 { background:linear-gradient(135deg,var(--color-primary-container),var(--color-surface-2)); }
+  .t2 { background:linear-gradient(135deg,var(--color-surface-2),var(--color-border)); }
+  .t3 { background:linear-gradient(135deg,color-mix(in srgb,var(--color-accent) 35%,var(--color-surface)),var(--color-surface-2)); }
+  .hscroll { display:flex; gap:10px; padding:0 16px 8px; overflow:hidden; flex:none; }
+  .mini { width:130px; flex:none; overflow:hidden; } .mini .photo { height:70px; } .mini .b { padding:8px 10px; font-size:12.5px; } .mini b { display:block; font-size:13px; }
+
+  /* Mapa */
+  .map { position:relative; background:var(--color-surface-2); overflow:hidden; flex:none; }
+  .map svg.bg { position:absolute; inset:0; width:100%; height:100%; }
+  .pin { position:absolute; transform:translate(-50%,-100%); display:grid; justify-items:center; }
+  .pin .ic { width:34px; height:34px; fill:var(--color-danger); stroke:#fff; stroke-width:1.4; filter:drop-shadow(0 2px 2px rgba(0,0,0,.25)); }
+  .pin.sight .ic { fill:var(--color-accent); } .pin.store .ic { fill:var(--color-primary); } .pin.found .ic { fill:var(--color-success); }
+  .pin small { margin-top:-4px; font:700 10.5px var(--font); background:var(--color-surface); color:var(--color-text); padding:2px 7px; border-radius:8px; border:1px solid var(--color-border); }
+  .me-dot { position:absolute; width:16px; height:16px; border-radius:50%; background:var(--color-primary); border:3px solid #fff; box-shadow:0 0 0 8px color-mix(in srgb,var(--color-primary) 22%,transparent); transform:translate(-50%,-50%); }
+  .radius { position:absolute; border-radius:50%; border:1.5px dashed var(--color-danger); background:color-mix(in srgb,var(--color-danger) 8%,transparent); transform:translate(-50%,-50%); }
+  .sheet { margin-top:-18px; position:relative; background:var(--color-surface); border-radius:22px 22px 0 0; border-top:1px solid var(--color-border); flex:1; min-height:0; overflow:hidden; padding-top:8px; }
+  .sheet::before { content:""; display:block; width:36px; height:4px; border-radius:2px; background:var(--color-border); margin:0 auto 6px; }
+  .lost { display:flex; gap:12px; padding:10px 16px; align-items:center; border-bottom:1px solid var(--color-border); }
+  .lost .photo { width:56px; height:56px; border-radius:var(--radius-md); flex:none; }
+  .lost b { font-size:14px; display:block; } .lost span { font-size:12px; color:var(--color-text-muted); display:block; }
+  .tag { display:inline-block; font:700 11px var(--font); padding:3px 8px; border-radius:6px; margin-top:4px; background:color-mix(in srgb,var(--color-danger) 14%,var(--color-surface)); color:var(--color-danger); }
+  .tag.ok { background:color-mix(in srgb,var(--color-success) 14%,var(--color-surface)); color:var(--color-success); }
+  .fab { position:absolute; right:14px; bottom:12px; z-index:3; box-shadow:0 6px 16px rgba(0,0,0,.2); }
+
+  /* Formularios */
+  .form { padding:4px 16px; display:flex; flex-direction:column; gap:10px; flex:1; min-height:0; overflow:hidden; }
+  .lbl { font-size:12.5px; font-weight:700; color:var(--color-text-muted); margin-bottom:5px; display:block; }
+  .field { min-height:46px; border:1.5px solid var(--color-border); border-radius:var(--radius-md); background:var(--color-surface); display:flex; align-items:center; gap:10px; padding:0 14px; font-size:14px; }
+  .field.area { min-height:74px; align-items:flex-start; padding-top:12px; }
+  .field.err { border-color:var(--color-danger); } .err-msg { font-size:12px; color:var(--color-danger); margin-top:5px; }
+  .toggle { width:46px; height:28px; border-radius:14px; background:var(--color-primary); position:relative; flex:none; }
+  .toggle::after { content:""; position:absolute; right:3px; top:3px; width:22px; height:22px; border-radius:50%; background:var(--color-on-primary); }
+  .toggle.off { background:var(--color-border); } .toggle.off::after { right:auto; left:3px; background:#fff; }
+  .rowb { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; }
+  .petsel { display:flex; gap:10px; }
+  .petsel .opt { flex:1; border:1.5px solid var(--color-border); border-radius:var(--radius-md); padding:10px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:700; }
+  .petsel .opt.on { border-color:var(--color-primary); background:var(--color-primary-container); }
+
+  /* Perfil */
+  .stats { display:flex; justify-content:space-around; text-align:center; padding:12px 8px; } .stats b { display:block; font-size:17px; } .stats span { font-size:12px; color:var(--color-text-muted); }
+  .ptabs { display:flex; border-bottom:1px solid var(--color-border); flex:none; } .ptabs span { flex:1; display:grid; place-items:center; height:44px; color:var(--color-text-muted); position:relative; }
+  .ptabs span.on { color:var(--color-primary); } .ptabs span.on::after { content:""; position:absolute; bottom:-1px; left:20%; right:20%; height:2.5px; background:var(--color-primary); border-radius:2px; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; padding:2px; } .grid3 div { aspect-ratio:1; }
+  /* Salud */
+  .next { background:var(--color-primary); color:var(--color-on-primary); border-radius:var(--radius-lg); padding:16px; margin:0 16px 8px; flex:none; }
+  .next small { opacity:.85; font-weight:600; } .next b { display:block; font-size:20px; margin:2px 0 10px; letter-spacing:-.01em; }
+  .next .btn { background:var(--color-surface); color:var(--color-primary); min-height:40px; }
+  :root[data-theme="dark"] .next .btn { background:var(--color-on-primary); }
+  .vac { display:flex; align-items:center; gap:12px; padding:11px 16px; border-bottom:1px solid var(--color-border); } .vac b { font-size:14px; display:block; } .vac span { font-size:12px; color:var(--color-text-muted); }
+  .vac .ic { color:var(--color-success); } .vac .ic.warn { color:var(--color-danger); }
+  .vac .st { margin-left:auto; font:700 11.5px var(--font); }
+  .chart { margin:0 16px; padding:12px; flex:none; } .chart svg { width:100%; height:70px; display:block; }
+  /* Tienda */
+  .shop { display:flex; gap:12px; padding:10px 16px; align-items:center; border-bottom:1px solid var(--color-border); } .shop .photo { width:60px; height:60px; border-radius:var(--radius-md); flex:none; }
+  .shop b { font-size:14px; display:block; } .shop span { font-size:12px; color:var(--color-text-muted); display:block; } .shop .open { color:var(--color-success); font-weight:700; }
+  .prod { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 16px; } .prod .card { overflow:hidden; } .prod .photo { height:82px; } .prod .b { padding:8px 10px; font-size:12.5px; } .prod b { display:block; font-size:13px; } .prod .pr { color:var(--color-primary); font-weight:800; margin-top:2px; display:block; }
+  /* Notificaciones */
+  .notif { display:flex; gap:12px; padding:11px 16px; align-items:flex-start; } .notif.new { background:color-mix(in srgb,var(--color-primary) 7%,var(--color-bg)); }
+  .notif .ico { width:40px; height:40px; border-radius:50%; display:grid; place-items:center; flex:none; background:var(--color-surface-2); color:var(--color-primary); }
+  .notif .ico.red { background:color-mix(in srgb,var(--color-danger) 14%,var(--color-surface)); color:var(--color-danger); }
+  .notif .ico.green { background:color-mix(in srgb,var(--color-success) 14%,var(--color-surface)); color:var(--color-success); }
+  .notif .t { font-size:13.5px; line-height:1.35; } .notif small { color:var(--color-text-muted); font-size:12px; }
+  /* Estados */
+  .skeleton { border-radius:8px; background:linear-gradient(90deg,var(--color-surface-2),var(--color-border),var(--color-surface-2)); background-size:200% 100%; animation:sh 1.4s linear infinite; }
+  @keyframes sh { to { background-position:-200% 0; } }
+  @media (prefers-reduced-motion: reduce) { .skeleton { animation:none; } }
+  .state { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; padding:0 36px; }
+  .state .big { width:84px; height:84px; border-radius:50%; background:var(--color-primary-container); color:var(--color-primary); display:grid; place-items:center; } .state .big .ic { width:38px; height:38px; }
+  .state .big.bad { background:color-mix(in srgb,var(--color-danger) 14%,var(--color-surface)); color:var(--color-danger); }
+  .state h4 { margin:0; font-size:17px; } .state p { margin:0; font-size:13.5px; color:var(--color-text-muted); }
+  .field .grow { flex:1; }
+  .checkbox { width:20px; height:20px; border-radius:6px; border:1.8px solid var(--color-border); display:grid; place-items:center; flex:none; color:var(--color-on-primary); }
+  .checkbox.on { background:var(--color-primary); border-color:var(--color-primary); } .checkbox .ic { width:14px; height:14px; stroke-width:3; }
+  .linkrow { display:flex; align-items:center; justify-content:space-between; font-size:13px; }
+  .link { color:var(--color-primary); font-weight:700; }
+  .or { display:flex; align-items:center; gap:10px; color:var(--color-text-muted); font-size:12px; font-weight:600; } .or::before,.or::after { content:""; flex:1; height:1px; background:var(--color-border); }
+  .login2 { flex:1; display:flex; flex-direction:column; padding:0 20px 14px; min-height:0; }
+  .login2 .center { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; padding:6px 8px; }
+  .login2 .word { font-size:34px; font-weight:800; letter-spacing:-.03em; color:var(--color-primary); line-height:1; }
+  .login2 .desc { font-size:13.5px; color:var(--color-text-muted); max-width:30ch; }
+  .login2 .stack { display:flex; flex-direction:column; gap:9px; }
+  .social { display:flex; gap:8px; } .social .btn { flex:1; }
+  .bigicon { width:84px; height:84px; border-radius:50%; background:var(--color-primary-container); color:var(--color-primary); display:grid; place-items:center; } .bigicon .ic { width:42px; height:42px; stroke-width:1.5; }
+  .shop .go { margin-left:auto; flex:none; width:40px; height:40px; border-radius:50%; display:grid; place-items:center; background:var(--color-primary-container); color:var(--color-primary); }
+  .shop .go .ic { width:20px; height:20px; }
+  .login { flex:1; display:flex; flex-direction:column; justify-content:flex-end; padding:0 20px 24px; gap:12px; }
+  .login .hero { flex:1; display:flex; flex-direction:column; justify-content:center; gap:8px; }
+  .login h2 { margin:0; font-size:30px; line-height:1.1; letter-spacing:-.02em; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo-mark" viewBox="0 0 512 512"><rect width="512" height="512" rx="120" fill="#1F4FA3"/><ellipse cx="128" cy="236" rx="52" ry="92" transform="rotate(22 128 236)" fill="#F2A93B"/><ellipse cx="384" cy="236" rx="52" ry="92" transform="rotate(-22 384 236)" fill="#F2A93B"/><circle cx="256" cy="278" r="150" fill="#fff"/><circle cx="204" cy="262" r="22" fill="#1F4FA3"/><circle cx="308" cy="262" r="22" fill="#1F4FA3"/><path d="M226 318C226 304 240 298 256 298C272 298 286 304 286 318C286 336 270 344 256 356C242 344 226 336 226 318Z" fill="#1F4FA3"/><path d="M256 356V374M228 386C240 394 252 392 256 374C260 392 272 394 284 386" fill="none" stroke="#1F4FA3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-faceid" viewBox="0 0 24 24"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M9 10v1.5M15 10v1.5M12 10v3h-1M9 15.5c1.8 1.6 4.2 1.6 6 0"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-nav" viewBox="0 0 24 24"><path d="M12 3 5 20l7-4 7 4z"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+    <symbol id="i-reels" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M10 8.5v7l6-3.5z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><path d="M12 7.5v3.2M12 13.2v.1"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 1 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-8-4.8-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.2 12 20 12 20z"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 3 10.5l7 2.5 2.5 7z"/><path d="m10 13 4-4"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.5L6 21z"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M12 20s-8-4.8-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.2 12 20 12 20z"/><path d="M7 12h2l1.5-2.5L13 14l1.5-2H17"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V7a3 3 0 0 1 6 0v1"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+    <symbol id="i-paw" viewBox="0 0 24 24"><circle cx="7" cy="10" r="1.8"/><circle cx="10.5" cy="6" r="1.8"/><circle cx="14.5" cy="6" r="1.8"/><circle cx="18" cy="10" r="1.8"/><path d="M12.5 11.5c3 0 5 3 4 5.5-.8 2-3 1.5-4 1.2-1 .3-3.2.8-4-1.2-1-2.5 1-5.5 4-5.5z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+    <symbol id="i-locate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M3 9a14 14 0 0 1 18 0M6 12.5a9.5 9.5 0 0 1 12 0M9 16a5 5 0 0 1 6 0"/><path d="M12 19.5v.1"/><path d="m4 4 16 16"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6 3h4l1.5 4.5-2 1.5a11 11 0 0 0 5.5 5.5l1.5-2L21 14v4a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <strong>Peludos · Pantallas</strong>
+  <div class="seg" role="group" aria-label="Tema">
+    <button type="button" data-set="light">Claro</button><button type="button" data-set="dark">Oscuro</button><button type="button" data-set="system">Sistema</button>
+  </div>
+</header>
+
+<main>
+  <h1>Todas las pantallas, con navegación por iconos.</h1>
+  <p class="lead">Maqueta de baja fidelidad de las pantallas de las etapas 1 a 3. Cambia entre Claro, Oscuro y Sistema arriba para ver las dos versiones. Es una propuesta para revisar: los textos y datos son ficticios.</p>
+
+  <h2>Navegación</h2>
+  <p class="note">Cinco iconos fijos abajo, sin texto, como en Instagram. Los iconos solos son menos claros para quien los ve por primera vez, así que cada uno lleva su etiqueta de accesibilidad, el activo se distingue por forma (relleno, trazo grueso y punto) y no solo por color, y el de Alertas muestra un punto rojo cuando hay una mascota perdida cerca.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Icono</th><th>Destino</th><th>Etiqueta accesible</th><th>Notas</th></tr></thead>
+    <tbody>
+      <tr><td><svg class="ic"><use href="#i-home"/></svg></td><td>Inicio</td><td><code>Inicio</code></td><td>Feed, historias y aviso de mascota perdida cercana</td></tr>
+      <tr><td><svg class="ic"><use href="#i-reels"/></svg></td><td>Reels</td><td><code>Reels</code></td><td>Reproductor vertical a pantalla completa</td></tr>
+      <tr><td><svg class="ic"><use href="#i-search"/></svg></td><td>Explorar</td><td><code>Explorar</code></td><td>Búsqueda, descubrir, tiendas y veterinarias cerca</td></tr>
+      <tr><td><svg class="ic"><use href="#i-alert"/></svg></td><td>Alertas</td><td><code>Alertas de mascotas perdidas</code></td><td>Mapa y lista; desde aquí se reporta una mascota perdida</td></tr>
+      <tr><td><b>M</b></td><td>Perfil</td><td><code>Mi perfil</code></td><td>Tu foto de perfil como icono; aquí viven tus mascotas, su salud y los ajustes</td></tr>
+      <tr><td><svg class="ic"><use href="#i-bell"/></svg></td><td>Notificaciones</td><td><code>Notificaciones, 3 nuevas</code></td><td>Arriba a la derecha, en vez del título; con contador</td></tr>
+      <tr><td><svg class="ic"><use href="#i-plus"/></svg></td><td>Crear publicación</td><td><code>Crear publicación</code></td><td>Arriba a la derecha</td></tr>
+      <tr><td><svg class="ic"><use href="#i-chat"/></svg></td><td>Mensajes</td><td><code>Mensajes</code></td><td>Etapa 3</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">Dónde viven las funciones que no tienen pestaña propia: <b>Salud</b> está dentro del perfil de cada mascota; <b>Tiendas</b> dentro de Explorar y en el mapa; los <b>Ajustes</b> (incluido el tema) dentro del perfil.</p>
+
+  <h2>1. Pestañas principales</h2>
+  <div class="gallery">
+
+    <!-- Inicio -->
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="appbar"><div class="brand"><svg class="mark"><use href="#logo-mark"/></svg>Peludos</div>
+          <div class="row">
+            <button class="ib" aria-label="Crear publicación"><svg class="ic"><use href="#i-plus"/></svg></button>
+            <button class="ib" aria-label="Notificaciones, 3 nuevas"><svg class="ic"><use href="#i-bell"/></svg><span class="badge">3</span></button>
+            <button class="ib" aria-label="Mensajes"><svg class="ic"><use href="#i-chat"/></svg></button>
+          </div></div>
+        <div class="stories">
+          <div class="story"><span class="av ring">+</span>Tu historia</div>
+          <div class="story"><span class="av ring">C</span>Canela</div>
+          <div class="story"><span class="av ring">L</span>Luna</div>
+          <div class="story"><span class="av ring">M</span>Max</div>
+          <div class="story"><span class="av">T</span>Toby</div>
+        </div>
+        <div class="alert"><svg class="ic"><use href="#i-alert"/></svg><div><b>Toby se perdió cerca de ti</b><span>Golden · a 800 m · hace 25 min</span></div><button class="go">Ver</button></div>
+        <div class="card post">
+          <div class="head"><span class="av">C</span><div><b>Canela</b><small>de Lucía · hace 2 h</small></div><span class="ib" style="margin-left:auto"><svg class="ic"><use href="#i-more"/></svg></span></div>
+          <div class="photo" style="height:190px">Foto</div>
+          <div class="acts"><button class="ib" aria-label="Me gusta"><svg class="ic"><use href="#i-heart"/></svg></button><button class="ib" aria-label="Comentar"><svg class="ic"><use href="#i-chat"/></svg></button><button class="ib" aria-label="Compartir"><svg class="ic"><use href="#i-send"/></svg></button><button class="ib sp" aria-label="Guardar"><svg class="ic"><use href="#i-bookmark"/></svg></button></div>
+          <div class="txt"><b>128 me gusta</b><br>Primer día de playa. Se negó a salir del agua.</div>
+        </div>
+      </div>
+      <nav class="tabbar" data-active="home" data-dot="alert"></nav></div>
+      <figcaption><b>Inicio</b>Campana y "+" arriba; historias de mascotas; aviso de alerta cercana solo si existe.</figcaption></figure>
+
+    <!-- Reels -->
+    <figure><div class="phone" style="background:#0A0F1A;color:#fff"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="reel">
+        <div class="vid">Video vertical</div><div class="scrim"></div>
+        <div class="top"><span>Reels</span><span class="ib" aria-label="Cámara"><svg class="ic"><use href="#i-camera"/></svg></span></div>
+        <div class="rail">
+          <div><svg class="ic"><use href="#i-heart"/></svg>2,4 mil</div>
+          <div><svg class="ic"><use href="#i-chat"/></svg>86</div>
+          <div><svg class="ic"><use href="#i-send"/></svg>Enviar</div>
+          <div><svg class="ic"><use href="#i-bookmark"/></svg></div>
+          <div><svg class="ic"><use href="#i-more"/></svg></div>
+        </div>
+        <div class="cap"><b><span class="av sm">M</span>Max · Border Collie <span class="chip on" style="font-size:11px;padding:4px 9px;background:#fff;color:#0A0F1A">Seguir</span></b>Aprendió a abrir la puerta solo. Ahora vivimos con candado.</div>
+        <div class="progress"><i></i></div>
+      </div>
+      <nav class="tabbar over" data-active="reels"></nav></div>
+      <figcaption><b>Reels</b>Pantalla completa, desliza hacia arriba para el siguiente. Siempre oscuro: el video manda.</figcaption></figure>
+
+    <!-- Explorar -->
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="search"><svg class="ic" style="width:20px;height:20px"><use href="#i-search"/></svg>Buscar mascotas, razas, tiendas</div>
+        <div class="chips"><span class="chip on">Para ti</span><span class="chip">Perros</span><span class="chip">Gatos</span><span class="chip">Adopción</span><span class="chip">Tiendas</span></div>
+        <p class="sec-title">Tiendas cerca</p>
+        <div class="hscroll">
+          <div class="card mini"><div class="photo">Logo</div><div class="b"><b>Huellitas</b><span class="muted">Abierto · 600 m</span></div></div>
+          <div class="card mini"><div class="photo">Logo</div><div class="b"><b>Vet San Roque</b><span class="muted">Abierto · 1,2 km</span></div></div>
+          <div class="card mini"><div class="photo">Logo</div><div class="b"><b>Patitas</b><span class="muted">Cierra 20:00</span></div></div>
+        </div>
+        <div class="masonry">
+          <div class="t1 h2"></div><div class="t3 h1"></div><div class="t2 h4"></div>
+          <div class="t2 h1"></div><div class="t1 h4"></div><div class="t3 h3"></div>
+          <div class="t3 h4"></div><div class="t2 h2"></div><div class="t1 h1"></div>
+        </div>
+      </div>
+      <nav class="tabbar" data-active="search"></nav></div>
+      <figcaption><b>Explorar</b>Búsqueda, filtros y descubrimiento. Las tiendas aparecen aquí, sin pestaña propia.</figcaption></figure>
+
+    <!-- Alertas -->
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><span class="sp"></span><h3>Alertas</h3><button class="ib" aria-label="Filtros"><svg class="ic"><use href="#i-locate"/></svg></button></div>
+        <div class="chips"><span class="chip on">Perdidas</span><span class="chip">Encontradas</span><span class="chip">Radio 3 km</span></div>
+        <div class="map" style="height:230px">
+          <svg class="bg" viewBox="0 0 320 230" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><ellipse cx="70" cy="60" rx="52" ry="34" fill="color-mix(in srgb, var(--color-success) 16%, var(--color-surface-2))"/><path d="M-10 150 L120 120 L200 140 L340 90" stroke="var(--color-surface)" stroke-width="14" fill="none"/><path d="M110 -10 L130 120 L170 240" stroke="var(--color-surface)" stroke-width="12" fill="none"/><path d="M230 -10 L210 140 L260 240" stroke="var(--color-surface)" stroke-width="9" fill="none"/><path d="M-10 195 L340 175" stroke="var(--color-surface)" stroke-width="8" fill="none"/></svg>
+          <div class="radius" style="left:50%;top:52%;width:120px;height:120px"></div>
+          <div class="me-dot" style="left:50%;top:52%"></div>
+          <div class="pin" style="left:62%;top:44%"><svg class="ic"><use href="#i-alert"/></svg><small>Toby</small></div>
+          <div class="pin" style="left:30%;top:70%"><svg class="ic"><use href="#i-alert"/></svg><small>Luna</small></div>
+          <div class="pin sight" style="left:70%;top:76%"><svg class="ic"><use href="#i-eye"/></svg></div>
+        </div>
+        <div class="sheet">
+          <div class="lost"><div class="photo">Foto</div><div><b>Toby · Golden retriever</b><span>Visto por última vez en Parque Central</span><span class="tag">Perdido hace 25 min</span></div></div>
+          <div class="lost"><div class="photo">Foto</div><div><b>Luna · Gata carey</b><span>Se escapó por la ventana, Av. Los Olivos</span><span class="tag">Perdida hace 3 h</span></div></div>
+        </div>
+        <button class="btn accent fab"><svg class="ic"><use href="#i-plus"/></svg>Reportar mascota perdida</button>
+      </div>
+      <nav class="tabbar" data-active="alert"></nav></div>
+      <figcaption><b>Alertas</b>El corazón del producto. Mapa con tu radio, lista y un botón de acción siempre visible.</figcaption></figure>
+
+    <!-- Perfil (mascota) -->
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="appbar"><div class="brand" style="font-size:17px">Canela <svg class="ic" style="width:18px;height:18px;color:var(--color-text-muted)"><use href="#i-back"/></svg></div>
+          <div class="row"><button class="ib" aria-label="Crear publicación"><svg class="ic"><use href="#i-plus"/></svg></button><button class="ib" aria-label="Ajustes"><svg class="ic"><use href="#i-more"/></svg></button></div></div>
+        <div class="pad" style="display:flex;gap:16px;align-items:center;padding-top:8px"><span class="av lg ring">C</span>
+          <div class="stats" style="flex:1;padding:0"><div><b>48</b><span>Posts</span></div><div><b>1,2 mil</b><span>Seguidores</span></div><div><b>230</b><span>Siguiendo</span></div></div></div>
+        <div class="pad" style="padding-top:10px"><b>Canela</b><div class="muted" style="font-size:13px">Beagle · 3 años · de Lucía<br>Experta en robar calcetines.</div></div>
+        <div class="pad" style="display:flex;gap:8px;padding-top:12px;padding-bottom:12px"><button class="btn primary" style="flex:1;min-height:40px">Editar</button><button class="btn ghost" style="flex:1;min-height:40px">Ver salud</button></div>
+        <div class="chips" style="padding-top:0"><span class="av sm ring" style="font-size:11px">C</span><span class="av sm" style="font-size:11px">T</span><span class="chip" style="align-self:center">+ Añadir mascota</span></div>
+        <div class="ptabs"><span class="on"><svg class="ic"><use href="#i-grid"/></svg></span><span><svg class="ic"><use href="#i-reels"/></svg></span><span><svg class="ic"><use href="#i-pulse"/></svg></span></div>
+        <div class="grid3"><div class="t1"></div><div class="t3"></div><div class="t2"></div><div class="t2"></div><div class="t1"></div><div class="t3"></div></div>
+      </div>
+      <nav class="tabbar" data-active="me"></nav></div>
+      <figcaption><b>Perfil de mascota</b>Cada mascota tiene su perfil. Arriba cambias de mascota; la pestaña con corazón es su salud.</figcaption></figure>
+  </div>
+
+  <h2>2. Mascota perdida</h2>
+  <p class="note">El flujo más importante: debe poder completarse con una mano y con prisa.</p>
+  <div class="gallery">
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><button class="ib" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button><h3>Mascota perdida</h3><span class="sp"></span></div>
+        <div class="form">
+          <div><span class="lbl">¿Quién se perdió?</span><div class="petsel"><div class="opt on"><span class="av sm">C</span>Canela</div><div class="opt"><span class="av sm">T</span>Toby</div></div></div>
+          <div><span class="lbl">Última vez vista</span>
+            <div class="map" style="height:80px;border-radius:14px;border:1px solid var(--color-border)"><svg class="bg" viewBox="0 0 300 80" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M-10 70 L300 40" stroke="var(--color-surface)" stroke-width="12" fill="none"/><path d="M120 -10 L150 120" stroke="var(--color-surface)" stroke-width="10" fill="none"/></svg><div class="pin" style="left:52%;top:62%"><svg class="ic"><use href="#i-alert"/></svg></div></div>
+            <div class="muted" style="font-size:12px;margin-top:5px">Mueve el pin hasta el lugar exacto</div></div>
+          <div class="field"><svg class="ic" style="width:20px;height:20px"><use href="#i-cal"/></svg>Hoy, 18:40</div>
+          <div><span class="lbl">Señas particulares</span><div class="field area muted" style="min-height:62px">Collar azul, mancha blanca en la pata derecha. Responde a "Canela".</div></div>
+          <div class="field"><svg class="ic" style="width:20px;height:20px"><use href="#i-phone"/></svg>Teléfono de contacto</div>
+          <div class="card rowb"><div><b style="font-size:13.5px">Avisar a quienes están a 3 km</b><div class="muted" style="font-size:12px">Recibirán una notificación</div></div><span class="toggle"></span></div>
+        </div>
+        <div class="pad" style="padding-bottom:16px"><button class="btn danger block">Publicar alerta</button></div>
+      </div></div>
+      <figcaption><b>Reportar</b>Mascota, lugar, hora, señas y contacto. Una sola pantalla. Botón rojo: es una emergencia.</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><button class="ib" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button><h3>Alerta</h3><button class="ib" aria-label="Compartir"><svg class="ic"><use href="#i-send"/></svg></button></div>
+        <div class="photo" style="height:170px;margin:0 16px;border-radius:18px">Foto de Toby</div>
+        <div class="pad" style="padding-top:12px"><span class="tag">Perdido hace 25 min</span>
+          <div style="font-size:21px;font-weight:800;letter-spacing:-.01em;margin-top:4px">Toby</div>
+          <div class="muted" style="font-size:13px">Golden retriever · 4 años · collar rojo · responde a su nombre</div></div>
+        <div class="map" style="height:92px;margin:12px 16px 0;border-radius:14px;border:1px solid var(--color-border)"><svg class="bg" viewBox="0 0 290 92" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M-10 60 L300 30" stroke="var(--color-surface)" stroke-width="12" fill="none"/></svg><div class="radius" style="left:50%;top:55%;width:70px;height:70px"></div><div class="pin" style="left:50%;top:62%"><svg class="ic"><use href="#i-alert"/></svg></div></div>
+        <p class="sec-title">Avistamientos (2)</p>
+        <div class="notif"><span class="ico" style="background:color-mix(in srgb,var(--color-accent) 25%,var(--color-surface));color:var(--color-on-accent)"><svg class="ic" style="width:20px;height:20px"><use href="#i-eye"/></svg></span><div class="t"><b>Marco</b> lo vio cerca de la panadería<br><small>hace 8 min</small></div></div>
+        <div class="pad" style="margin-top:auto;padding-bottom:16px;display:flex;flex-direction:column;gap:8px"><button class="btn accent block"><svg class="ic"><use href="#i-eye"/></svg>Lo vi</button><button class="btn ghost block"><svg class="ic"><use href="#i-phone"/></svg>Contactar al dueño</button></div>
+      </div></div>
+      <figcaption><b>Detalle de alerta</b>Foto, señas, mapa y avistamientos. "Lo vi" es la acción principal; compartir va arriba.</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><span class="sp"></span><h3>Alertas</h3><span class="sp"></span></div>
+        <div class="chips"><span class="chip on">Perdidas</span><span class="chip">Encontradas</span></div>
+        <div class="lost"><div class="photo">Foto</div><div><b>Rocky · Mestizo</b><span>Parque de las Flores</span><span class="tag ok">¡Encontrado! Ya está en casa</span></div></div>
+        <div class="lost"><div class="photo">Foto</div><div><b>Nala · Siamesa</b><span>Calle Los Cedros</span><span class="tag ok">¡Encontrada! Hace 2 días</span></div></div>
+      </div></div>
+      <figcaption><b>Encontradas</b>Los finales felices se quedan visibles: motivan a seguir ayudando.</figcaption></figure>
+  </div>
+
+  <h2>3. Salud y tiendas</h2>
+  <div class="gallery">
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><button class="ib" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button><h3>Salud de Canela</h3><button class="ib" aria-label="Añadir"><svg class="ic"><use href="#i-plus"/></svg></button></div>
+        <div class="next"><small>Próxima vacuna</small><b>Antirrábica · en 12 días</b><button class="btn"><svg class="ic"><use href="#i-cal"/></svg>Agendar cita</button></div>
+        <p class="sec-title">Vacunas</p>
+        <div class="vac"><svg class="ic"><use href="#i-shield"/></svg><div><b>Quíntuple</b><span>Aplicada el 14 mar 2026</span></div><span class="st" style="color:var(--color-success)">Al día</span></div>
+        <div class="vac"><svg class="ic warn"><use href="#i-shield"/></svg><div><b>Antirrábica</b><span>Vence el 17 oct 2026</span></div><span class="st" style="color:var(--color-danger)">Por vencer</span></div>
+        <div class="vac"><svg class="ic"><use href="#i-shield"/></svg><div><b>Desparasitación</b><span>Cada 3 meses · última 2 ago</span></div><span class="st" style="color:var(--color-success)">Al día</span></div>
+        <p class="sec-title">Peso</p>
+        <div class="card chart"><svg viewBox="0 0 280 70" preserveAspectRatio="none" aria-label="Peso en los últimos 6 meses"><path d="M0 52 L56 46 L112 40 L168 34 L224 30 L280 24" fill="none" stroke="var(--color-primary)" stroke-width="3" stroke-linecap="round"/></svg><div class="muted" style="font-size:12px;margin-top:6px">11,2 kg · +0,4 kg este mes</div></div>
+      </div></div>
+      <figcaption><b>Carnet de salud</b>Lo siguiente que hay que hacer, primero. Solo registra y recuerda: no da diagnósticos.</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><button class="ib" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button><h3>Tiendas y veterinarias</h3><span class="sp"></span></div>
+        <div class="chips"><span class="chip on">Todas</span><span class="chip">Veterinarias</span><span class="chip">Pet shops</span><span class="chip">Peluquería</span></div>
+        <div class="map" style="height:150px"><svg class="bg" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M-10 100 L330 60" stroke="var(--color-surface)" stroke-width="12" fill="none"/><path d="M140 -10 L170 160" stroke="var(--color-surface)" stroke-width="10" fill="none"/></svg><div class="me-dot" style="left:44%;top:60%"></div><div class="pin store" style="left:64%;top:54%"><svg class="ic"><use href="#i-bag"/></svg></div><div class="pin store" style="left:24%;top:42%"><svg class="ic"><use href="#i-pulse"/></svg></div></div>
+        <div class="shop"><div class="photo">Logo</div><div><b>Huellitas Pet Shop</b><span>Comida y juguetes · 600 m</span><span class="open">Abierto hasta las 21:00 · 4,8 ★</span></div><span class="go"><svg class="ic"><use href="#i-nav"/></svg></span></div>
+        <div class="shop"><div class="photo">Logo</div><div><b>Veterinaria San Roque</b><span>Consultas y vacunas · 1,2 km</span><span class="open">Abierto 24 horas · 4,9 ★</span></div><span class="go"><svg class="ic"><use href="#i-nav"/></svg></span></div>
+        <div class="shop"><div class="photo">Logo</div><div><b>Patitas Peluquería</b><span>Baño y corte · 2,1 km</span><span>Cierra a las 19:00 · 4,6 ★</span></div><span class="go"><svg class="ic"><use href="#i-nav"/></svg></span></div>
+      </div></div>
+      <figcaption><b>Directorio</b>Tiendas y veterinarias cerca de ti, del mapa. Cada resultado dice si está abierto ahora y se puede abrir la ruta.</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><button class="ib" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button><h3>Veterinarias cerca</h3><span class="sp"></span></div>
+        <div class="chips"><span class="chip">Todas</span><span class="chip on">Veterinarias</span><span class="chip">Pet shops</span><span class="chip">Peluquería</span></div>
+        <div class="map" style="height:140px"><svg class="bg" viewBox="0 0 320 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M-10 95 L330 55" stroke="var(--color-surface)" stroke-width="12" fill="none"/><path d="M150 -10 L180 150" stroke="var(--color-surface)" stroke-width="10" fill="none"/></svg><div class="me-dot" style="left:46%;top:58%"></div><div class="pin store" style="left:30%;top:40%"><svg class="ic"><use href="#i-pulse"/></svg></div><div class="pin store" style="left:68%;top:46%"><svg class="ic"><use href="#i-pulse"/></svg></div><div class="pin store" style="left:80%;top:80%"><svg class="ic"><use href="#i-pulse"/></svg></div></div>
+        <div class="linkrow pad" style="padding-top:10px;padding-bottom:4px"><span class="muted" style="font-weight:600">5 a menos de 3 km</span><span class="chip" style="padding:5px 11px">Abierto ahora</span></div>
+        <div class="shop"><div class="photo">Logo</div><div><b>Veterinaria San Roque</b><span>1,2 km · Consultas y vacunas</span><span class="open">Abierto 24 horas · 4,9 ★</span></div><span class="go"><svg class="ic"><use href="#i-nav"/></svg></span></div>
+        <div class="shop"><div class="photo">Logo</div><div><b>Clínica Mascotas Sanas</b><span>1,8 km · Cirugía y rayos X</span><span class="open">Abierto hasta las 20:00 · 4,7 ★</span></div><span class="go"><svg class="ic"><use href="#i-nav"/></svg></span></div>
+        <div class="shop"><div class="photo">Logo</div><div><b>Vet Amigos del Parque</b><span>2,4 km · Consultas</span><span>Cierra a las 18:00 · 4,5 ★</span></div><span class="go"><svg class="ic"><use href="#i-nav"/></svg></span></div>
+      </div></div>
+      <figcaption><b>Veterinarias cerca</b>Al elegir "Veterinarias" el listado se recarga con las más cercanas, ordenadas por distancia. Igual para Pet shops.</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><button class="ib" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button><h3>Huellitas Pet Shop</h3><button class="ib" aria-label="Guardar"><svg class="ic"><use href="#i-bookmark"/></svg></button></div>
+        <div class="pad" style="display:flex;gap:12px;align-items:center"><span class="av lg" style="width:64px;height:64px;border-radius:16px;font-size:22px">H</span><div><b style="font-size:17px">Huellitas Pet Shop</b><div class="muted" style="font-size:12.5px">Comida, juguetes y accesorios<br>4,8 ★ · 126 reseñas</div></div></div>
+        <div class="pad" style="display:flex;gap:8px;padding-top:12px;padding-bottom:10px"><button class="btn primary" style="flex:1;min-height:42px"><svg class="ic"><use href="#i-chat"/></svg>Escribir</button><button class="btn ghost" style="flex:1;min-height:42px"><svg class="ic"><use href="#i-phone"/></svg>Llamar</button></div>
+        <p class="sec-title">Catálogo</p>
+        <div class="prod">
+          <div class="card"><div class="photo">Foto</div><div class="b"><b>Alimento adulto 7 kg</b><span class="muted">Perros</span><span class="pr">48,90</span></div></div>
+          <div class="card"><div class="photo">Foto</div><div class="b"><b>Pelota resistente</b><span class="muted">Juguetes</span><span class="pr">9,50</span></div></div>
+          <div class="card"><div class="photo">Foto</div><div class="b"><b>Rascador mediano</b><span class="muted">Gatos</span><span class="pr">32,00</span></div></div>
+          <div class="card"><div class="photo">Foto</div><div class="b"><b>Collar reflectante</b><span class="muted">Accesorios</span><span class="pr">14,90</span></div></div>
+        </div>
+      </div></div>
+      <figcaption><b>Tienda</b>Catálogo con contacto directo. El carrito y el pago llegan en la fase B.</figcaption></figure>
+  </div>
+
+  <h2>4. Cuenta, notificaciones y ajustes</h2>
+  <div class="gallery">
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><button class="ib" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button><h3>Notificaciones</h3><span class="sp"></span></div>
+        <p class="sec-title" style="padding-top:4px">Nuevas</p>
+        <div class="notif new"><span class="ico red"><svg class="ic" style="width:20px;height:20px"><use href="#i-alert"/></svg></span><div class="t"><b>Toby se perdió a 800 m de ti</b><br>Golden retriever, collar rojo<br><small>hace 25 min</small></div></div>
+        <div class="notif new"><span class="ico green"><svg class="ic" style="width:20px;height:20px"><use href="#i-shield"/></svg></span><div class="t"><b>Recordatorio:</b> la antirrábica de Canela vence en 12 días<br><small>hace 1 h</small></div></div>
+        <div class="notif new"><span class="ico"><svg class="ic" style="width:20px;height:20px"><use href="#i-heart"/></svg></span><div class="t"><b>Marco</b> y 14 personas más le dieron me gusta a tu foto<br><small>hace 2 h</small></div></div>
+        <p class="sec-title">Anteriores</p>
+        <div class="notif"><span class="ico"><svg class="ic" style="width:20px;height:20px"><use href="#i-paw"/></svg></span><div class="t"><b>Valeria</b> empezó a seguir a Canela<br><small>ayer</small></div></div>
+        <div class="notif"><span class="ico"><svg class="ic" style="width:20px;height:20px"><use href="#i-chat"/></svg></span><div class="t"><b>Lucía</b> comentó: "¡Qué carita!"<br><small>ayer</small></div></div>
+      </div></div>
+      <figcaption><b>Notificaciones</b>Agrupadas por nuevas y anteriores. Las alertas de mascotas perdidas y la salud van primero por urgencia.</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><button class="ib" aria-label="Cerrar"><svg class="ic"><use href="#i-back"/></svg></button><h3>Nueva publicación</h3><button class="btn primary" style="min-height:36px;padding:0 14px">Publicar</button></div>
+        <div class="photo" style="height:250px;margin:0 16px;border-radius:18px">Foto elegida</div>
+        <div class="chips" style="padding-top:12px"><span class="chip on">Foto</span><span class="chip">Reel</span><span class="chip">Historia</span></div>
+        <div class="form" style="flex:none">
+          <div><span class="lbl">¿Quién sale en la foto?</span><div class="petsel"><div class="opt on"><span class="av sm">C</span>Canela</div><div class="opt"><span class="av sm">T</span>Toby</div></div></div>
+          <div class="field area muted">Escribe un pie de foto…</div>
+          <div class="card rowb"><b style="font-size:13.5px">Mostrar mi ubicación aproximada</b><span class="toggle off"></span></div>
+        </div>
+      </div></div>
+      <figcaption><b>Crear</b>Se elige qué mascota aparece. La ubicación está apagada por defecto.</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><button class="ib" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button><h3>Apariencia</h3><span class="sp"></span></div>
+        <p class="sec-title">Tema</p>
+        <div class="card" style="margin:0 16px">
+          <div class="rowb" style="border-bottom:1px solid var(--color-border)"><b style="font-size:14px">Claro</b><span></span></div>
+          <div class="rowb" style="border-bottom:1px solid var(--color-border)"><b style="font-size:14px">Oscuro</b><span></span></div>
+          <div class="rowb"><div><b style="font-size:14px">Sistema</b><div class="muted" style="font-size:12px">Sigue la configuración del dispositivo</div></div><svg class="ic" style="color:var(--color-primary)"><use href="#i-check"/></svg></div>
+        </div>
+        <p class="sec-title">Privacidad</p>
+        <div class="card" style="margin:0 16px"><div class="rowb"><div><b style="font-size:14px">Cuenta privada</b><div class="muted" style="font-size:12px">Solo tus seguidores ven tus fotos</div></div><span class="toggle off"></span></div></div>
+        <p class="sec-title">Cuenta</p>
+        <div class="card" style="margin:0 16px"><div class="rowb"><b style="font-size:14px">Cerrar sesión</b></div><div class="rowb" style="border-top:1px solid var(--color-border)"><b style="font-size:14px;color:var(--color-danger)">Eliminar mi cuenta</b></div></div>
+      </div></div>
+      <figcaption><b>Ajustes</b>Tema Claro / Oscuro / Sistema, privacidad y eliminación de cuenta (obligatoria en las tiendas de apps).</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="login2">
+          <div class="center"><svg class="mark xl"><use href="#logo-mark"/></svg><div class="word">Peludos</div><div class="desc">Comparte a tu mascota y descubre todo lo que necesita.</div></div>
+          <div class="stack">
+            <div class="field muted"><svg class="ic" style="width:20px;height:20px"><use href="#i-mail"/></svg>Correo electrónico</div>
+            <div class="field muted"><svg class="ic" style="width:20px;height:20px"><use href="#i-lock"/></svg><span class="grow">Contraseña</span><svg class="ic" style="width:20px;height:20px"><use href="#i-eye"/></svg></div>
+            <div class="linkrow"><span style="display:flex;align-items:center;gap:8px"><span class="checkbox on"><svg class="ic"><use href="#i-check"/></svg></span>Recordarme</span><span class="link">¿Olvidaste tu contraseña?</span></div>
+            <button class="btn primary block">Entrar</button>
+            <button class="btn ghost block"><svg class="ic"><use href="#i-faceid"/></svg>Entrar con Face ID</button>
+            <div class="or">o</div>
+            <div class="social"><button class="btn ghost">Google</button><button class="btn ghost">Apple</button></div>
+          </div>
+          <div class="muted" style="font-size:13px;text-align:center;padding-top:12px">¿Aún no tienes cuenta? <b class="link">Crear cuenta</b></div>
+        </div>
+      </div></div>
+      <figcaption><b>Entrar</b>Logo y nombre al centro, descripción de dos líneas, "Recordarme", recuperar contraseña y acceso rápido con Face ID (solo aparece si el dispositivo lo tiene activado).</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><button class="ib" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button><h3>Crear cuenta</h3><span class="sp"></span></div>
+        <div class="form">
+          <div class="center" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 0 6px"><svg class="mark" style="width:48px;height:48px;border-radius:13px"><use href="#logo-mark"/></svg><div class="muted" style="font-size:13px;text-align:center">Crea tu cuenta y arma el perfil de tu mascota.</div></div>
+          <div class="field muted"><svg class="ic" style="width:20px;height:20px"><use href="#i-user"/></svg>Nombre de usuario</div>
+          <div class="field muted"><svg class="ic" style="width:20px;height:20px"><use href="#i-mail"/></svg>Correo electrónico</div>
+          <div><div class="field muted"><svg class="ic" style="width:20px;height:20px"><use href="#i-lock"/></svg><span class="grow">Contraseña</span><svg class="ic" style="width:20px;height:20px"><use href="#i-eye"/></svg></div><div class="muted" style="font-size:12px;margin-top:5px">Mínimo 8 caracteres, con una letra y un número.</div></div>
+          <div class="linkrow" style="align-items:flex-start;gap:10px"><span class="checkbox on" style="margin-top:2px"><svg class="ic"><use href="#i-check"/></svg></span><span class="muted" style="flex:1;font-size:12.5px">Acepto los <b class="link">Términos</b> y la <b class="link">Política de privacidad</b>.</span></div>
+        </div>
+        <div class="pad" style="padding-bottom:16px"><button class="btn primary block">Crear cuenta</button></div>
+      </div></div>
+      <figcaption><b>Crear cuenta</b>Cuatro datos y la aceptación de términos. Sin más pasos: el perfil de la mascota se arma después.</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><button class="ib" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button><h3>Recuperar contraseña</h3><span class="sp"></span></div>
+        <div class="state" style="flex:none;padding-top:26px"><div class="bigicon"><svg class="ic"><use href="#i-lock"/></svg></div><h4>¿Olvidaste tu contraseña?</h4><p>Escribe tu correo y te enviaremos un enlace para crear una nueva.</p></div>
+        <div class="form" style="padding-top:18px;flex:none"><div class="field muted"><svg class="ic" style="width:20px;height:20px"><use href="#i-mail"/></svg>Correo electrónico</div></div>
+        <div class="pad" style="margin-top:auto;padding-bottom:16px;display:flex;flex-direction:column;gap:8px"><button class="btn primary block">Enviar enlace</button><button class="btn ghost block">Volver a entrar</button></div>
+      </div></div>
+      <figcaption><b>Recuperar contraseña</b>Un solo campo y un solo botón. Después se confirma que el correo fue enviado.</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="state"><div class="bigicon"><svg class="ic"><use href="#i-faceid"/></svg></div><h4>Entra más rápido con Face ID</h4><p>La próxima vez podrás abrir Peludos con tu rostro, sin escribir la contraseña. Puedes cambiarlo en Ajustes.</p></div>
+        <div class="pad" style="padding-bottom:18px;display:flex;flex-direction:column;gap:8px"><button class="btn primary block"><svg class="ic"><use href="#i-faceid"/></svg>Activar Face ID</button><button class="btn ghost block">Ahora no</button></div>
+      </div></div>
+      <figcaption><b>Acceso rápido</b>Se ofrece una sola vez, tras el primer ingreso. En dispositivos con huella dirá "Activar huella".</figcaption></figure>
+  </div>
+
+  <h2>5. Estados de cada pantalla</h2>
+  <p class="note">Cada pantalla con datos tiene cuatro estados: cargando, vacío, error y éxito. Aquí van tres ejemplos; el cuarto es el éxito que ya se ve arriba.</p>
+  <div class="gallery">
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="appbar"><div class="brand"><svg class="mark"><use href="#logo-mark"/></svg>Peludos</div><div class="row"><span class="ib"><svg class="ic"><use href="#i-plus"/></svg></span><span class="ib"><svg class="ic"><use href="#i-bell"/></svg></span><span class="ib"><svg class="ic"><use href="#i-chat"/></svg></span></div></div>
+        <div class="stories"><div class="story"><span class="skeleton" style="width:54px;height:54px;border-radius:50%"></span></div><div class="story"><span class="skeleton" style="width:54px;height:54px;border-radius:50%"></span></div><div class="story"><span class="skeleton" style="width:54px;height:54px;border-radius:50%"></span></div><div class="story"><span class="skeleton" style="width:54px;height:54px;border-radius:50%"></span></div></div>
+        <div class="card post" style="padding:12px"><div style="display:flex;gap:10px;align-items:center"><span class="skeleton" style="width:40px;height:40px;border-radius:50%"></span><div style="flex:1"><div class="skeleton" style="height:12px;width:50%;margin-bottom:6px"></div><div class="skeleton" style="height:10px;width:30%"></div></div></div><div class="skeleton" style="height:180px;margin-top:12px;border-radius:14px"></div><div class="skeleton" style="height:12px;width:80%;margin-top:12px"></div></div>
+      </div>
+      <nav class="tabbar" data-active="home"></nav></div>
+      <figcaption><b>Cargando</b>Skeleton con la forma del contenido, no un spinner centrado.</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><span class="sp"></span><h3>Alertas</h3><span class="sp"></span></div>
+        <div class="state"><div class="big"><svg class="ic"><use href="#i-shield"/></svg></div><h4>Todo tranquilo por tu zona</h4><p>No hay mascotas perdidas en 3 km. Si alguna se pierde, te avisamos al instante.</p><button class="btn ghost" style="margin-top:6px">Cambiar radio de aviso</button></div>
+      </div>
+      <nav class="tabbar" data-active="alert"></nav></div>
+      <figcaption><b>Vacío</b>Una buena noticia, con una acción útil.</figcaption></figure>
+
+    <figure><div class="phone"><div class="sb"><span>9:41</span><i></i></div>
+      <div class="screen">
+        <div class="nav"><span class="sp"></span><h3>Explorar</h3><span class="sp"></span></div>
+        <div class="state"><div class="big bad"><svg class="ic"><use href="#i-wifi"/></svg></div><h4>No pudimos cargar</h4><p>Revisa tu conexión a internet e inténtalo de nuevo.</p><button class="btn primary" style="margin-top:6px">Reintentar</button></div>
+      </div>
+      <nav class="tabbar" data-active="search"></nav></div>
+      <figcaption><b>Error</b>Qué pasó, sin jerga técnica, y cómo reintentar.</figcaption></figure>
+  </div>
+</main>
+
+<script>
+  var root = document.documentElement;
+  function apply(mode) {
+    if (mode === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', mode);
+    document.querySelectorAll('.seg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.set === mode)); });
+  }
+  var saved = 'system';
+  try { saved = localStorage.getItem('pc-theme') || 'system'; } catch (e) {}
+  apply(saved);
+  document.querySelector('.seg').addEventListener('click', function (e) {
+    var m = e.target && e.target.dataset && e.target.dataset.set; if (!m) return;
+    try { localStorage.setItem('pc-theme', m); } catch (err) {}
+    apply(m);
+  });
+  // Barra de pestañas: la misma en todas las pantallas, con el icono activo marcado.
+  var tabs = [['home','i-home','Inicio'],['reels','i-reels','Reels'],['search','i-search','Explorar'],['alert','i-alert','Alertas de mascotas perdidas'],['me',null,'Mi perfil']];
+  document.querySelectorAll('nav.tabbar').forEach(function (nav) {
+    nav.setAttribute('aria-label', 'Navegación principal');
+    nav.innerHTML = tabs.map(function (t) {
+      var on = nav.dataset.active === t[0];
+      var inner = t[1] ? '<svg class="ic"><use href="#' + t[1] + '"/></svg>' : '<span class="me">M</span>';
+      var dot = (t[0] === 'alert' && nav.dataset.dot) ? '<span class="pdot"></span>' : '';
+      return '<button class="tab' + (on ? ' on' : '') + '" aria-label="' + t[2] + '" aria-current="' + (on ? 'page' : 'false') + '">' + inner + dot + '</button>';
+    }).join('');
+  });
+</script>
+</body>
+</html>
