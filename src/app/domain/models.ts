@@ -31,6 +31,8 @@ export interface Post {
   readonly kind: 'photo' | 'reel';
   /** The real photo, when there is one; the card shows its gradient placeholder until then, or without it. */
   readonly photoUrl?: string;
+  /** A reel's video, when there is one; the reel shows its dark placeholder until then, or without it. */
+  readonly videoUrl?: string;
 }
 
 export interface Story {
