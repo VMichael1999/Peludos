@@ -1,16 +1,19 @@
 import { Component, input } from '@angular/core';
-import { Text, View } from '@ng-native/components';
+import { Image, Text, View } from '@ng-native/components';
 
 /**
- * A stand-in for a photo until real images arrive: a soft blue gradient with a caption. Real photos
- * will replace the gradient with an `<image>` in the same box, so nothing else needs to change.
+ * A photo box. With a `src` it shows that image, filling the box; the soft blue gradient underneath
+ * is what shows while the image loads, and stays if it never does. Without a `src` it is the
+ * gradient with its caption, the placeholder every screen was designed against.
  */
 @Component({
   selector: 'app-photo',
-  imports: [Text, View],
+  imports: [Image, Text, View],
   template: `
     <view class="photo" [attr.data-tone]="tone()">
-      @if (caption(); as caption) {
+      @if (src(); as src) {
+        <image class="image" [src]="src" [alt]="alt() ?? ''" resizeMode="cover" />
+      } @else if (caption(); as caption) {
         <text class="caption">{{ caption }}</text>
       }
     </view>
@@ -31,6 +34,13 @@ import { Text, View } from '@ng-native/components';
     .photo[data-tone='warm'] {
       background-image: linear-gradient(135deg, var(--color-accent-container), var(--color-surface-2));
     }
+    .image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
     .caption {
       font-size: var(--text-xs);
       font-weight: 600;
@@ -40,5 +50,9 @@ import { Text, View } from '@ng-native/components';
 })
 export class AppPhoto {
   readonly caption = input<string>();
+  /** The image to show, as a URL. */
+  readonly src = input<string>();
+  /** What the image shows, for screen readers. */
+  readonly alt = input<string>();
   readonly tone = input<'blue' | 'border' | 'warm'>('blue');
 }
