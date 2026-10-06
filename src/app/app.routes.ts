@@ -2,6 +2,7 @@ import type { Routes } from '@angular/router';
 import { AlertDetailPage } from './features/alerts/alert-detail.page.ts';
 import { ReportAlertPage } from './features/alerts/report-alert.page.ts';
 import { EnableBiometricsPage } from './features/auth/enable-biometrics.page.ts';
+import { HealthPage } from './features/health/health.page.ts';
 import { LaunchPage } from './features/auth/launch.page.ts';
 import { LoginPage } from './features/auth/login.page.ts';
 import { RecoverPage } from './features/auth/recover.page.ts';
@@ -19,4 +20,5 @@ export const routes: Routes = [
   { path: 'alert/:id', component: AlertDetailPage },
   { path: 'stores', component: DirectoryPage },
   { path: 'store/:id', component: StoreDetailPage },
+  { path: 'health/:id', component: HealthPage },
 ];
