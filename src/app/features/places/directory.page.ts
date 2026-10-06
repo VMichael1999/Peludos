@@ -2,6 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { Pressable, ScrollView, Text, View } from '@ng-native/components';
 import { DeepLinks } from '@ng-native/device';
 import { NativeNavigation } from '@ng-native/router';
+import { fitPins } from '../../data/places/google-places.mapper.ts';
 import { distance, stars } from '../../domain/format.ts';
 import type { Place } from '../../domain/models.ts';
 import { PlacesRepository } from '../../data/places/places.repository.ts';
@@ -14,6 +15,9 @@ import { AppScreen } from '../../shared/ui/app-screen.ts';
 import { AppSkeleton } from '../../shared/ui/app-skeleton.ts';
 import { AppState } from '../../shared/ui/app-state.ts';
 import { type PlaceFilter, PlacesStore } from './places.store.ts';
+
+/** The drawn map is small: it shows the nearest few, and the list below has them all. */
+const MAP_PINS = 12;
 
 const FILTERS: readonly { readonly id: PlaceFilter; readonly label: string }[] = [
   { id: 'all', label: 'Todas' },
@@ -174,9 +178,10 @@ export class DirectoryPage {
   protected readonly notice = inject(PlacesRepository).notice;
 
   protected readonly places = computed(() => this.store.results.data() ?? []);
-  protected readonly pins = computed<MapPin[]>(() =>
-    (this.store.results.status() === 'loading' ? [] : this.places()).map((p) => ({ id: p.id, x: p.pin.x, y: p.pin.y, kind: p.kind })),
-  );
+  protected readonly pins = computed<MapPin[]>(() => {
+    const shown = this.store.results.status() === 'loading' ? [] : this.places().slice(0, MAP_PINS);
+    return fitPins(shown, this.store.radiusKm()).map((p) => ({ id: p.id, x: p.pin.x, y: p.pin.y, kind: p.kind }));
+  });
   protected readonly summary = computed(() => {
     if (this.store.results.status() === 'loading') return 'Buscando lugares cerca…';
     const n = this.places().length;

@@ -28,3 +28,9 @@ test('"Abierto ahora" hides what is closed', async () => {
   await screen.findByText('7 a menos de 3 km');
   expect(screen.queryByText('Vet Central')).toBeNull();
 });
+
+test('the list keeps every place even though the map draws only the nearest few', async () => {
+  await render(DirectoryPage, { providers: appProviders });
+
+  expect(await screen.findAllByRole('button', { name: /^Cómo llegar a/ })).toHaveLength(8);
+});
