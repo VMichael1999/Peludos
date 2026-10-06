@@ -1,4 +1,5 @@
 import type { AppNotification, HealthRecord, LostAlert, Pet, Place, Post, Product, Story } from '../../domain/models.ts';
+import { GENERATED_POSTS } from './generated-posts.ts';
 
 /** Believable sample data, in Spanish, for the mock adapters. Nothing here is real. */
 
@@ -7,7 +8,7 @@ export const MY_PETS: readonly Pet[] = [
   { id: 'milo', name: 'Milo', species: 'cat', breed: 'Gato europeo', ageYears: 5, ownerName: 'Lucía', bio: 'Siesta profesional, de lunes a domingo.', posts: 21, followers: 480, following: 90 },
 ];
 
-export const POSTS: readonly Post[] = [
+const FEATURED_POSTS: readonly Post[] = [
   { id: 'p1', petName: 'Canela', species: 'dog', ownerName: 'Lucía', caption: 'Primer día de playa. Se negó a salir del agua.', minutesAgo: 120, likes: 128, comments: 14, liked: false, saved: false, tone: 'blue', kind: 'photo' },
   { id: 'p2', petName: 'Max', species: 'dog', ownerName: 'Marco', caption: 'Aprendió a abrir la puerta solo. Ahora vivimos con candado.', minutesAgo: 300, likes: 2400, comments: 86, liked: true, saved: false, tone: 'warm', kind: 'reel' },
   { id: 'p3', petName: 'Luna', species: 'cat', ownerName: 'Valeria', caption: 'Domingo de sol y cero planes.', minutesAgo: 1560, likes: 342, comments: 27, liked: false, saved: true, tone: 'border', kind: 'photo' },
@@ -18,6 +19,9 @@ export const POSTS: readonly Post[] = [
   { id: 'p8', petName: 'Canela', species: 'dog', ownerName: 'Lucía', caption: 'Practicando la pata. Todavía negocia con premios.', minutesAgo: 900, likes: 1300, comments: 58, liked: false, saved: false, tone: 'blue', kind: 'reel' },
   { id: 'p9', petName: 'Nala', species: 'cat', ownerName: 'Camila', caption: 'El salto imposible, a cámara lenta.', minutesAgo: 1800, likes: 980, comments: 47, liked: true, saved: false, tone: 'warm', kind: 'reel' },
 ];
+
+/** The hand-written posts plus the generated ones that fill the feed out to 25 dogs and 25 cats, newest first. */
+export const POSTS: readonly Post[] = [...FEATURED_POSTS, ...GENERATED_POSTS].sort((a, b) => a.minutesAgo - b.minutesAgo);
 
 export const STORIES: readonly Story[] = [
   { id: 's0', petName: 'Tu historia', mine: true },
