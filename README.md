@@ -5,7 +5,7 @@ Red social para mascotas: comparte fotos y reels, avisa cuando una mascota se pi
 ![Angular Native](https://img.shields.io/badge/Angular_Native-22-DD0031?logo=angular&logoColor=white)
 ![Expo](https://img.shields.io/badge/Expo_SDK-57-000020?logo=expo&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-54_passing-2EA043)
+![Tests](https://img.shields.io/badge/tests-67_passing-2EA043)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 Está hecha con [Angular Native](https://ng-native.com): componentes de Angular que se dibujan como vistas nativas reales de iOS y Android (no es una web envuelta). Es un prototipo: funciona de punta a punta con datos de ejemplo, y los lugares cercanos pueden venir de Google Places.
@@ -83,12 +83,17 @@ Todo está en [`docs/`](docs): el [plan de acción](docs/plan-de-accion.md), la 
 
 ## Hoja de ruta
 
-- [ ] Fotos y videos reales (Dog CEO, The Cat API, Pexels) detrás de los repositorios
+- [x] Fotos reales de perros (Dog CEO) detrás de un repositorio
+- [ ] Fotos de gatos (The Cat API) y videos para los reels (Pexels)
 - [ ] Selector de fotos y cámara al crear publicaciones
 - [ ] Mapa nativo en lugar del mapa dibujado
 - [ ] Backend real, con tiendas afiliadas y catálogo propio
 - [ ] Comentarios, chat con tiendas y notificaciones push
 - [ ] Editar perfil y añadir mascotas
+
+## Créditos
+
+Las fotos de perros de ejemplo vienen de [Dog CEO](https://dog.ceo/dog-api), una API gratuita y sin clave. Son contenido de terceros y solo se usan para llenar el prototipo; en producción las fotos son las que suben los usuarios.
 
 ## Licencia
 
