@@ -12,6 +12,7 @@ import { NotificationsPage } from './features/notifications/notifications.page.t
 import { DirectoryPage } from './features/places/directory.page.ts';
 import { StoreDetailPage } from './features/places/store-detail.page.ts';
 import { AppearancePage } from './features/settings/appearance.page.ts';
+import { Shell } from './features/shell/shell.ts';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', component: LaunchPage },
@@ -19,6 +20,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterPage },
   { path: 'recover', component: RecoverPage },
   { path: 'enable-biometrics', component: EnableBiometricsPage },
+  { path: 'app', component: Shell },
   { path: 'report', component: ReportAlertPage },
   { path: 'alert/:id', component: AlertDetailPage },
   { path: 'stores', component: DirectoryPage },
