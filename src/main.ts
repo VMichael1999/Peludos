@@ -2,12 +2,14 @@
 // structuredClone. Metro runs it before this file only when something imports it, and nothing
 // else does in a release build, which would then get React Native's fetch, with no body.
 import 'expo';
+import Constants from 'expo-constants';
 import { AppRegistry, Image, Platform, processColor } from 'react-native';
 import { mount } from '@ng-native/platform';
 import { currentConditions, deviceTokens, watchConditions } from '@ng-native/device';
 import { getFabricUIManager, registerPlatformComponents, styleSheetOf } from '@ng-native/fabric';
 import { loadFonts } from '@ng-native/expo/fonts';
 import { appProviders } from './app/app.providers.ts';
+import { MAPS_API_KEY } from './app/core/config.ts';
 import { App } from './app/app.ts';
 
 registerPlatformComponents(Platform.OS);
@@ -18,7 +20,9 @@ AppRegistry.registerRunnable('main', async ({ rootTag }: { rootTag: number | str
   await loadFonts(styleSheetOf(App)).catch((error: unknown) => console.error(error));
 
   const app = mount(Number(rootTag), App, getFabricUIManager(), {
-    providers: appProviders,
+    // The Google key comes from .env through app.config.js. It is read here, not in the token, so
+    // that the tests, which never load this file, run without React Native and without a key.
+    providers: [...appProviders, { provide: MAPS_API_KEY, useValue: String(Constants.expoConfig?.extra?.['googleMapsApiKey'] ?? '') }],
     // Colours, as the integers the platform wants.
     processColor,
     // What `@media` resolves against. Without it every media query is false and a responsive
