@@ -4,6 +4,7 @@ import { compact } from '../../domain/format.ts';
 import type { Post } from '../../domain/models.ts';
 import { AppAvatar } from '../../shared/ui/app-avatar.ts';
 import { AppIcon } from '../../shared/ui/app-icon.ts';
+import { ReelVideo } from './reel-video.ts';
 
 /**
  * One full-screen reel. The video is a placeholder until a video source is wired in; the layout,
@@ -12,10 +13,13 @@ import { AppIcon } from '../../shared/ui/app-icon.ts';
  */
 @Component({
   selector: 'app-reel-card',
-  imports: [AppAvatar, AppIcon, Pressable, Text, View],
+  imports: [AppAvatar, AppIcon, Pressable, ReelVideo, Text, View],
   template: `
     <view class="reel" [style]="{ height: height() }">
       <view class="video"><text class="video-label">Video vertical</text></view>
+      @if (playing() && post().videoUrl; as url) {
+        <app-reel-video [url]="url" />
+      }
       <view class="scrim"></view>
 
       <view class="rail">
@@ -128,6 +132,8 @@ import { AppIcon } from '../../shared/ui/app-icon.ts';
 export class ReelCard {
   readonly post = input.required<Post>();
   readonly height = input.required<number>();
+  /** True for the reel on screen: only that one mounts a player, so the others cost nothing. */
+  readonly playing = input(false);
   readonly like = output<Post>();
   readonly save = output<Post>();
   readonly share = output<Post>();

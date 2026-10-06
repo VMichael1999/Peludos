@@ -31,8 +31,8 @@ import { ReelCard } from './reel-card.ts';
               decelerationRate="fast"
               (momentumScrollEnd)="settle($event.nativeEvent.contentOffset.y)"
             >
-              @for (reel of reels(); track reel.id) {
-                <app-reel-card [post]="reel" [height]="height()" (like)="feed.toggleLike($event)" (save)="feed.toggleSave($event)" (share)="send($event)" />
+              @for (reel of reels(); track reel.id; let i = $index) {
+                <app-reel-card [post]="reel" [height]="height()" [playing]="active() && i === current()" (like)="feed.toggleLike($event)" (save)="feed.toggleSave($event)" (share)="send($event)" />
               }
             </scroll-view>
           }
