@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PetCommunity — Dirección visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+  /* Tokens: los mismos nombres que usará la app (ver plan-de-accion.md, sección 5). */
+  :root {
+    --color-bg: #F6F8FC;
+    --color-surface: #FFFFFF;
+    --color-surface-2: #EEF2FA;
+    --color-primary: #1F4FA3;
+    --color-on-primary: #FFFFFF;
+    --color-primary-container: #DCE6F8;
+    --color-accent: #F2A93B;
+    --color-on-accent: #1A1204;
+    --color-text: #0E1626;
+    --color-text-muted: #5B6784;
+    --color-border: #D9E0EE;
+    --color-danger: #C93636;
+    --color-success: #177A4C;
+    --radius-sm: 8px; --radius-md: 14px; --radius-lg: 22px;
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px;
+    --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  :root[data-theme="dark"] {
+    --color-bg: #0B1220;
+    --color-surface: #121C30;
+    --color-surface-2: #1A2742;
+    --color-primary: #8DB2F5;
+    --color-on-primary: #0B1220;
+    --color-primary-container: #203A6B;
+    --color-accent: #F5B650;
+    --color-on-accent: #1A1204;
+    --color-text: #E9EFFB;
+    --color-text-muted: #9AA7C4;
+    --color-border: #263553;
+    --color-danger: #FF7A7A;
+    --color-success: #4CC38A;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="dark"]) {
+      --color-bg: #0B1220; --color-surface: #121C30; --color-surface-2: #1A2742;
+      --color-primary: #8DB2F5; --color-on-primary: #0B1220; --color-primary-container: #203A6B;
+      --color-accent: #F5B650; --color-on-accent: #1A1204;
+      --color-text: #E9EFFB; --color-text-muted: #9AA7C4; --color-border: #263553;
+      --color-danger: #FF7A7A; --color-success: #4CC38A;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--color-bg); color: var(--color-text);
+    font-family: var(--font); line-height: 1.5; -webkit-font-smoothing: antialiased;
+  }
+  header.top {
+    position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between;
+    gap: var(--space-4); padding: var(--space-3) var(--space-5);
+    background: var(--color-surface); border-bottom: 1px solid var(--color-border);
+  }
+  header.top strong { font-size: 15px; letter-spacing: .01em; }
+  .seg { display: inline-flex; padding: 3px; gap: 2px; background: var(--color-surface-2); border-radius: 999px; }
+  .seg button {
+    font: 600 13px var(--font); color: var(--color-text-muted); background: transparent; border: 0;
+    padding: 8px 14px; border-radius: 999px; cursor: pointer; min-height: 36px;
+  }
+  .seg button[aria-pressed="true"] { background: var(--color-primary); color: var(--color-on-primary); }
+  main { max-width: 1080px; margin: 0 auto; padding: var(--space-6) var(--space-5) var(--space-7); }
+  h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.1; margin: 0 0 var(--space-3); font-weight: 800; letter-spacing: -.02em; max-width: 18ch; }
+  h2 { font-size: 20px; margin: var(--space-7) 0 var(--space-2); font-weight: 700; }
+  p.lead { color: var(--color-text-muted); max-width: 60ch; margin: 0 0 var(--space-3); }
+  p.note { color: var(--color-text-muted); font-size: 14px; max-width: 70ch; }
+  .grid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); margin-top: var(--space-4); }
+  .sw { border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); }
+  .sw .chip { height: 64px; display: flex; align-items: flex-end; padding: 8px 12px; font-weight: 700; font-size: 13px; }
+  .sw .meta { padding: 10px 12px; font-size: 12.5px; color: var(--color-text-muted); }
+  .sw .meta b { display: block; color: var(--color-text); font-size: 13.5px; }
+  .two { display: grid; gap: var(--space-5); grid-template-columns: 1fr; margin-top: var(--space-4); }
+  @media (min-width: 900px) { .two { grid-template-columns: 1.1fr .9fr; align-items: start; } }
+  .panel { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-5); }
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  .btn {
+    font: 700 15px var(--font); border: 0; border-radius: var(--radius-md); padding: 0 var(--space-5);
+    min-height: 48px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .btn.primary { background: var(--color-primary); color: var(--color-on-primary); }
+  .btn.accent { background: var(--color-accent); color: var(--color-on-accent); }
+  .btn.ghost { background: transparent; color: var(--color-primary); box-shadow: inset 0 0 0 1.5px var(--color-border); }
+  .tag { font: 600 13px var(--font); padding: 6px 12px; border-radius: 999px; background: var(--color-primary-container); color: var(--color-text); }
+  .tag.on { background: var(--color-primary); color: var(--color-on-primary); }
+  .field { width: 100%; min-height: 48px; border-radius: var(--radius-md); border: 1.5px solid var(--color-border); background: var(--color-surface); color: var(--color-text); padding: 0 var(--space-4); font: 500 15px var(--font); }
+  .field.err { border-color: var(--color-danger); }
+  .err-msg { color: var(--color-danger); font-size: 13px; margin-top: 6px; }
+  .type-sample div { margin-bottom: var(--space-3); }
+  .t-display { font-size: 32px; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
+  .t-title { font-size: 20px; font-weight: 700; }
+  .t-body { font-size: 16px; }
+  .t-caption { font-size: 13px; color: var(--color-text-muted); font-weight: 500; }
+
+  /* Pantalla de ejemplo */
+  .phone { width: 100%; max-width: 330px; margin: 0 auto; border: 1px solid var(--color-border); border-radius: 36px; background: var(--color-bg); overflow: hidden; box-shadow: 0 1px 0 var(--color-border); }
+  .phone .bar { display: flex; justify-content: space-between; align-items: center; padding: 18px 18px 8px; }
+  .phone .bar .title { font-weight: 800; font-size: 22px; letter-spacing: -.02em; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary-container); color: var(--color-primary); display: grid; place-items: center; font-weight: 800; flex: none; }
+  .alert {
+    margin: 4px 14px 10px; padding: 12px 14px; border-radius: var(--radius-md);
+    background: var(--color-surface); border: 1.5px solid var(--color-danger);
+    display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center;
+  }
+  .alert b { font-size: 14px; } .alert span { font-size: 12.5px; color: var(--color-text-muted); grid-column: 1; }
+  .alert .go { grid-column: 2; grid-row: 1 / span 2; font: 700 13px var(--font); color: var(--color-danger); background: transparent; border: 0; min-height: 44px; padding: 0 6px; }
+  .post { margin: 0 14px 12px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
+  .post .head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; }
+  .post .head b { font-size: 14.5px; display: block; line-height: 1.2; }
+  .post .head small { color: var(--color-text-muted); font-size: 12.5px; }
+  .post .photo { height: 150px; background: linear-gradient(135deg, var(--color-primary-container), var(--color-surface-2)); display: grid; place-items: center; color: var(--color-text-muted); font-size: 12.5px; font-weight: 600; }
+  .post .body { padding: 12px 14px 14px; font-size: 14px; }
+  .post .acts { display: flex; gap: 18px; margin-top: 8px; color: var(--color-text-muted); font-size: 13px; font-weight: 600; }
+  .tabbar { display: flex; justify-content: space-around; padding: 10px 6px 16px; border-top: 1px solid var(--color-border); background: var(--color-surface); margin-top: 6px; }
+  .tabbar span { font-size: 11.5px; font-weight: 600; color: var(--color-text-muted); text-align: center; min-width: 52px; }
+  .tabbar span.on { color: var(--color-primary); }
+  .skeleton { height: 14px; border-radius: 7px; background: linear-gradient(90deg, var(--color-surface-2), var(--color-border), var(--color-surface-2)); background-size: 200% 100%; animation: sh 1.4s linear infinite; }
+  @keyframes sh { to { background-position: -200% 0; } }
+  @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin-top: var(--space-4); }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--color-border); }
+  th { color: var(--color-text-muted); font-weight: 600; }
+  .ok { color: var(--color-success); font-weight: 700; }
+  footer { margin-top: var(--space-7); font-size: 13px; color: var(--color-text-muted); }
+</style>
+</head>
+<body>
+<header class="top">
+  <strong>PetCommunity · Dirección visual</strong>
+  <div class="seg" role="group" aria-label="Tema">
+    <button type="button" data-set="light">Claro</button>
+    <button type="button" data-set="dark">Oscuro</button>
+    <button type="button" data-set="system">Sistema</button>
+  </div>
+</header>
+
+<main>
+  <h1>Azul profundo, blanco y un acento cálido.</h1>
+  <p class="lead">Propuesta de base visual para aprobar antes de programar. Es el mismo comportamiento que tendrá la app: sigue al dispositivo, y se puede forzar claro u oscuro a mano.</p>
+  <p class="note">Esto es una maqueta HTML para decidir. La app real usará estos mismos tokens como propiedades CSS personalizadas en Angular Native.</p>
+
+  <h2>Paleta</h2>
+  <p class="note">Azul oscuro moderado como color dominante, acento ámbar para acciones principales y rojo reservado a mascotas perdidas, para que una alerta nunca se confunda con un error cualquiera.</p>
+  <div class="grid" id="swatches"></div>
+
+  <h2>Contraste medido</h2>
+  <p class="note">Texto normal necesita al menos 4,5:1 (WCAG AA). Calculado con la fórmula de luminancia relativa, no a ojo.</p>
+  <table>
+    <thead><tr><th>Par</th><th>Claro</th><th>Oscuro</th></tr></thead>
+    <tbody>
+      <tr><td>Texto sobre superficie</td><td class="ok">18,08</td><td class="ok">14,75</td></tr>
+      <tr><td>Texto secundario sobre superficie</td><td class="ok">5,65</td><td class="ok">7,05</td></tr>
+      <tr><td>Texto sobre botón primario</td><td class="ok">7,76</td><td class="ok">8,75</td></tr>
+      <tr><td>Texto sobre botón de acento</td><td class="ok">9,29</td><td class="ok">10,32</td></tr>
+      <tr><td>Peligro sobre superficie</td><td class="ok">5,17</td><td class="ok">6,74</td></tr>
+      <tr><td>Éxito sobre superficie</td><td class="ok">5,35</td><td class="ok">7,68</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Componentes y pantalla de ejemplo</h2>
+  <div class="two">
+    <div class="panel">
+      <div class="type-sample">
+        <div class="t-display">Canela ya está en casa</div>
+        <div class="t-title">Mascotas cerca de ti</div>
+        <div class="t-body">Beagle, 3 años. Vista por última vez en el parque central a las 18:40.</div>
+        <div class="t-caption">Hace 12 minutos · a 400 m</div>
+      </div>
+      <div class="row" style="margin:var(--space-4) 0">
+        <button class="btn primary" type="button">Publicar foto</button>
+        <button class="btn accent" type="button">Reportar avistamiento</button>
+        <button class="btn ghost" type="button">Ahora no</button>
+      </div>
+      <div class="row" style="margin-bottom:var(--space-4)">
+        <span class="tag on">Perros</span><span class="tag">Gatos</span><span class="tag">Adopción</span><span class="tag">Tiendas</span>
+      </div>
+      <label class="t-caption" for="n">Nombre de la mascota</label>
+      <input id="n" class="field err" value="A" aria-describedby="e">
+      <div id="e" class="err-msg">El nombre necesita al menos 2 letras.</div>
+      <div style="margin-top:var(--space-5)">
+        <div class="t-caption" style="margin-bottom:8px">Estado de carga (skeleton, no spinner)</div>
+        <div class="skeleton" style="width:70%;margin-bottom:8px"></div>
+        <div class="skeleton" style="width:92%;margin-bottom:8px"></div>
+        <div class="skeleton" style="width:55%"></div>
+      </div>
+    </div>
+
+    <div class="phone" aria-label="Ejemplo de pantalla de inicio">
+      <div class="bar"><span class="title">Inicio</span><span class="avatar">M</span></div>
+      <div class="alert">
+        <b>Toby se perdió cerca de ti</b>
+        <span>Golden retriever · a 800 m · hace 25 min</span>
+        <button class="go" type="button">Ver mapa</button>
+      </div>
+      <div class="post">
+        <div class="head"><span class="avatar">C</span><div><b>Canela</b><small>de Lucía · hace 2 h</small></div></div>
+        <div class="photo">Foto de la publicación</div>
+        <div class="body">Primer día de playa. Se negó a salir del agua.
+          <div class="acts"><span>128 me gusta</span><span>14 comentarios</span><span>Guardar</span></div>
+        </div>
+      </div>
+      <div class="tabbar"><span class="on">Inicio</span><span>Reels</span><span>Explorar</span><span>Alertas</span><span>Perfil</span></div>
+    </div>
+  </div>
+
+  <h2>Tipografía</h2>
+  <p class="note">Propuesta: Plus Jakarta Sans (cercana pero seria). En nativo no hay pila de respaldo: la fuente debe empaquetarse con <code>expo-font</code> y comprobarse en el simulador, o cae en silencio a la del sistema. Está pendiente de tu aprobación.</p>
+
+  <footer>Pendiente de decidir: nombre definitivo, variante de idioma, referencias visuales y lo que no quieres ver. Ver <code>plan-de-accion.md</code>.</footer>
+</main>
+
+<script>
+  var root = document.documentElement;
+  var swatches = [
+    ['--color-bg','Fondo'],['--color-surface','Superficie'],['--color-surface-2','Superficie 2'],
+    ['--color-primary','Primario'],['--color-primary-container','Contenedor primario'],['--color-accent','Acento'],
+    ['--color-text','Texto'],['--color-text-muted','Texto secundario'],['--color-border','Borde'],
+    ['--color-danger','Peligro / mascota perdida'],['--color-success','Éxito']
+  ];
+  var holder = document.getElementById('swatches');
+  swatches.forEach(function (s) {
+    var d = document.createElement('div'); d.className = 'sw';
+    d.innerHTML = '<div class="chip" style="background:var(' + s[0] + ')"></div><div class="meta"><b>' + s[1] + '</b><code>' + s[0] + '</code> <span class="hex" data-v="' + s[0] + '"></span></div>';
+    holder.appendChild(d);
+  });
+  function paintHex() {
+    var cs = getComputedStyle(root);
+    document.querySelectorAll('.hex').forEach(function (el) { el.textContent = cs.getPropertyValue(el.dataset.v).trim().toUpperCase(); });
+  }
+  function apply(mode) {
+    if (mode === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', mode);
+    document.querySelectorAll('.seg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.set === mode)); });
+    paintHex();
+  }
+  var saved = 'system';
+  try { saved = localStorage.getItem('pc-theme') || 'system'; } catch (e) {}
+  apply(saved);
+  document.querySelector('.seg').addEventListener('click', function (e) {
+    var m = e.target && e.target.dataset && e.target.dataset.set; if (!m) return;
+    try { localStorage.setItem('pc-theme', m); } catch (err) {}
+    apply(m);
+  });
+  if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paintHex);
+</script>
+</body>
+</html>
