@@ -6,6 +6,8 @@ import { LaunchPage } from './features/auth/launch.page.ts';
 import { LoginPage } from './features/auth/login.page.ts';
 import { RecoverPage } from './features/auth/recover.page.ts';
 import { RegisterPage } from './features/auth/register.page.ts';
+import { DirectoryPage } from './features/places/directory.page.ts';
+import { StoreDetailPage } from './features/places/store-detail.page.ts';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', component: LaunchPage },
@@ -15,4 +17,6 @@ export const routes: Routes = [
   { path: 'enable-biometrics', component: EnableBiometricsPage },
   { path: 'report', component: ReportAlertPage },
   { path: 'alert/:id', component: AlertDetailPage },
+  { path: 'stores', component: DirectoryPage },
+  { path: 'store/:id', component: StoreDetailPage },
 ];
