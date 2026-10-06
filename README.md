@@ -5,7 +5,7 @@ Red social para mascotas: comparte fotos y reels, avisa cuando una mascota se pi
 ![Angular Native](https://img.shields.io/badge/Angular_Native-22-DD0031?logo=angular&logoColor=white)
 ![Expo](https://img.shields.io/badge/Expo_SDK-57-000020?logo=expo&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-91_passing-2EA043)
+![Tests](https://img.shields.io/badge/tests-102_passing-2EA043)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 Está hecha con [Angular Native](https://ng-native.com): componentes de Angular que se dibujan como vistas nativas reales de iOS y Android (no es una web envuelta). Es un prototipo: funciona de punta a punta con datos de ejemplo, y los lugares cercanos pueden venir de Google Places.
@@ -54,6 +54,17 @@ Sin configurar nada, la app muestra lugares de ejemplo y lo dice en pantalla. Pa
 
 La clave viaja dentro de la app, así que **restríngela** en Google Cloud a las APIs que uses. En producción, lo seguro es pasar las llamadas por un servidor propio. Mientras pruebas en Expo Go, no la restrinjas por bundle ID de iOS: Expo Go tiene el suyo.
 
+## Videos de los reels
+
+Los reels se reproducen con `expo-video` y sus videos verticales vienen de [Pexels](https://www.pexels.com/api/) (clave gratuita, 200 peticiones por hora). Sin clave, cada reel conserva su marcador oscuro.
+
+1. Crea una clave en <https://www.pexels.com/api/> y guárdala en `.env` como `PEXELS_API_KEY`.
+2. Reinicia Metro con `npx expo start --clear`.
+
+Pexels pide un enlace visible a su sitio donde se muestren sus videos.
+
+**Estado conocido:** el reproductor carga y reproduce (`readyToPlay`, `playing`), pero en Expo Go la vista nativa de video no dibuja el cuadro. Probablemente haga falta un build de desarrollo (`npx expo run:ios`); está sin verificar. Mientras tanto, usa Pexels solo si quieres probarlo, porque el audio podría sonar sin imagen.
+
 ## Arquitectura
 
 ```
@@ -84,7 +95,8 @@ Todo está en [`docs/`](docs): el [plan de acción](docs/plan-de-accion.md), la 
 ## Hoja de ruta
 
 - [x] Fotos reales de perros (Dog CEO) y de gatos (The Cat API) detrás de un repositorio
-- [ ] Videos para los reels (Pexels)
+- [x] Videos para los reels desde Pexels, con clave opcional (ver "Videos de los reels")
+- [ ] Verificar la reproducción de video en un build de desarrollo: en Expo Go la vista no dibuja
 - [ ] Selector de fotos y cámara al crear publicaciones
 - [ ] Mapa nativo en lugar del mapa dibujado
 - [ ] Backend real, con tiendas afiliadas y catálogo propio
