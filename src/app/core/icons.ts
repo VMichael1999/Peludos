@@ -7,7 +7,7 @@ export type IconName =
   | 'home' | 'reels' | 'search' | 'alert' | 'bell' | 'plus' | 'chat' | 'heart' | 'send' | 'bookmark'
   | 'more' | 'back' | 'pulse' | 'bag' | 'camera' | 'paw' | 'check' | 'shield' | 'calendar' | 'moon'
   | 'locate' | 'grid' | 'wifiOff' | 'phone' | 'eye' | 'eyeOff' | 'faceId' | 'mail' | 'lock' | 'user'
-  | 'navigate' | 'chevronRight' | 'close' | 'volume' | 'volumeOff';
+  | 'navigate' | 'chevronRight' | 'close' | 'volume' | 'volumeOff' | 'play';
 
 const PATHS: Record<IconName, string> = {
   home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
@@ -42,6 +42,7 @@ const PATHS: Record<IconName, string> = {
   user: '<circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/>',
   volume: '<path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>',
   volumeOff: '<path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="m16 9.5 4 5M20 9.5l-4 5"/>',
+  play: '<path d="M8 5v14l11-7z"/>',
   navigate: '<path d="M12 3 5 20l7-4 7 4z"/>',
   chevronRight: '<path d="m9 5 7 7-7 7"/>',
   close: '<path d="M6 6l12 12M18 6 6 18"/>',
