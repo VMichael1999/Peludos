@@ -8,6 +8,7 @@ import { mount } from '@ng-native/platform';
 import { currentConditions, deviceTokens, watchConditions } from '@ng-native/device';
 import { getFabricUIManager, registerPlatformComponents, styleSheetOf } from '@ng-native/fabric';
 import { registerExpoViews } from '@ng-native/expo';
+import { registerExpoMap } from '@ng-native/expo/map-view';
 import { loadFonts } from '@ng-native/expo/fonts';
 import { appProviders } from './app/app.providers.ts';
 import { LIVE_DATA, MAPS_API_KEY, PEXELS_API_KEY } from './app/core/config.ts';
@@ -16,6 +17,8 @@ import { App } from './app/app.ts';
 registerPlatformComponents(Platform.OS);
 // `<expo-video>` is the view the reels play their videos in.
 registerExpoViews('expo-video');
+// `<expo-map>` is the real map: Apple Maps on iOS, Google Maps on Android. Not available in Expo Go.
+registerExpoMap(Platform.OS === 'android' ? 'android' : 'ios');
 
 AppRegistry.registerRunnable('main', async ({ rootTag }: { rootTag: number | string }) => {
   // The brand font must be registered with the platform before the first layout, or the first
