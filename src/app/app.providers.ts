@@ -2,7 +2,7 @@ import { type EnvironmentProviders, type Provider, inject } from '@angular/core'
 import { withComponentInputBinding } from '@angular/router';
 import { provideNativeHttpClient } from '@ng-native/platform/http';
 import { provideNativeRouter } from '@ng-native/router';
-import { LIVE_DATA, MAPS_API_KEY, PEXELS_API_KEY } from './core/config.ts';
+import { LIVE_DATA, MAPS_API_KEY, PEXELS_API_KEY, PIXABAY_API_KEY } from './core/config.ts';
 import { routes } from './app.routes.ts';
 import { AuthRepository } from './data/auth/auth.repository.ts';
 import { MockAuthRepository } from './data/auth/mock-auth.repository.ts';
@@ -30,8 +30,11 @@ import { MockPostsRepository } from './data/posts/mock-posts.repository.ts';
 import { PhotoPostsRepository } from './data/posts/photo-posts.repository.ts';
 import { VideoPostsRepository } from './data/posts/video-posts.repository.ts';
 import { MockReelVideosRepository } from './data/videos/mock-reel-videos.repository.ts';
+import { MockVideoFeedRepository } from './data/videos/mock-video-feed.repository.ts';
 import { PexelsVideosRepository } from './data/videos/pexels-videos.repository.ts';
+import { PixabayVideoFeedRepository } from './data/videos/pixabay-video-feed.repository.ts';
 import { ReelVideosRepository } from './data/videos/reel-videos.repository.ts';
+import { VideoFeedRepository } from './data/videos/video-feed.repository.ts';
 
 /**
  * The composition root: where each port gets the adapter behind it. Swapping the mock backend for
@@ -69,6 +72,14 @@ export const appProviders: (Provider | EnvironmentProviders)[] = [
     // their placeholders.
     provide: ReelVideosRepository,
     useFactory: () => (inject(LIVE_DATA) && inject(PEXELS_API_KEY) ? inject(PexelsVideosRepository) : inject(MockReelVideosRepository)),
+  },
+  MockVideoFeedRepository,
+  PixabayVideoFeedRepository,
+  {
+    // The reels feed comes from Pixabay when the app runs with a Pixabay key; otherwise it shows
+    // sample reels without video.
+    provide: VideoFeedRepository,
+    useFactory: () => (inject(LIVE_DATA) && inject(PIXABAY_API_KEY) ? inject(PixabayVideoFeedRepository) : inject(MockVideoFeedRepository)),
   },
   { provide: AlertsRepository, useClass: MockAlertsRepository },
   provideNativeHttpClient(),
