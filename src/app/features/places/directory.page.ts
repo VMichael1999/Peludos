@@ -10,6 +10,7 @@ import { AppAvatar } from '../../shared/ui/app-avatar.ts';
 import { AppChip } from '../../shared/ui/app-chip.ts';
 import { AppIcon } from '../../shared/ui/app-icon.ts';
 import { AppMapSurface, type MapPin } from '../../shared/ui/app-map-surface.ts';
+import { AppPlacesMap } from '../../shared/ui/app-places-map.ts';
 import { AppNavBar } from '../../shared/ui/app-nav-bar.ts';
 import { AppScreen } from '../../shared/ui/app-screen.ts';
 import { AppSkeleton } from '../../shared/ui/app-skeleton.ts';
@@ -28,7 +29,7 @@ const FILTERS: readonly { readonly id: PlaceFilter; readonly label: string }[] =
 
 @Component({
   selector: 'app-directory-page',
-  imports: [AppAvatar, AppChip, AppIcon, AppMapSurface, AppNavBar, AppScreen, AppSkeleton, AppState, Pressable, ScrollView, Text, View],
+  imports: [AppAvatar, AppChip, AppIcon, AppMapSurface, AppNavBar, AppPlacesMap, AppScreen, AppSkeleton, AppState, Pressable, ScrollView, Text, View],
   template: `
     <app-screen>
       <app-nav-bar [title]="store.title()" />
@@ -37,7 +38,11 @@ const FILTERS: readonly { readonly id: PlaceFilter; readonly label: string }[] =
           <app-chip [label]="filter.label" [selected]="store.kind() === filter.id" (press)="store.kind.set(filter.id)" />
         }
       </scroll-view>
-      <app-map-surface [height]="150" [pins]="pins()" [me]="{ x: 46, y: 58 }" />
+      @if (hasRealMap()) {
+        <app-places-map [height]="190" [places]="places()" (pick)="openById($event)" />
+      } @else {
+        <app-map-surface [height]="150" [pins]="pins()" [me]="{ x: 46, y: 58 }" />
+      }
 
       <view class="summary">
         <text class="count">{{ summary() }}</text>
@@ -182,6 +187,8 @@ export class DirectoryPage {
     const shown = this.store.results.status() === 'loading' ? [] : this.places().slice(0, MAP_PINS);
     return fitPins(shown, this.store.radiusKm()).map((p) => ({ id: p.id, x: p.pin.x, y: p.pin.y, kind: p.kind }));
   });
+  /** The native map needs real coordinates: the sample places only have a spot on the drawn one. */
+  protected readonly hasRealMap = computed(() => this.places().some((p) => p.location));
   protected readonly summary = computed(() => {
     if (this.store.results.status() === 'loading') return 'Buscando lugares cerca…';
     const n = this.places().length;
@@ -205,6 +212,10 @@ export class DirectoryPage {
 
   protected open(place: Place): void {
     void this.nav.push('/store/' + place.id);
+  }
+
+  protected openById(id: string): void {
+    if (id) void this.nav.push('/store/' + id);
   }
 
   /** Hands the place to the device's maps app, which draws the route. */
