@@ -10,6 +10,12 @@ const KM_PER_DEGREE = 111.32;
 const TILES_ACROSS = 1.56;
 const EQUATOR_KM = 40075;
 
+/** The zoom at which a map the width of a phone screen spans `widthKm` at this latitude, kept to street-to-city levels. */
+export function zoomFor(widthKm: number, latitude: number): number {
+  const zoom = Math.log2((EQUATOR_KM * Math.cos((latitude * Math.PI) / 180) * TILES_ACROSS) / widthKm);
+  return Math.min(17, Math.max(10, Math.round(zoom * 10) / 10));
+}
+
 /**
  * Where to point the camera so every place with coordinates is in view: the middle of their
  * bounding box, zoomed to the wider side of it with a margin so pins do not sit on the edge.
@@ -28,6 +34,5 @@ export function cameraFor(places: readonly Place[]): Camera | null {
   const eastWestKm = (Math.max(...lngs) - Math.min(...lngs)) * KM_PER_DEGREE * Math.cos((latitude * Math.PI) / 180);
   const widthKm = Math.max(northSouthKm, eastWestKm, 0.4) * 1.5;
 
-  const zoom = Math.log2((EQUATOR_KM * Math.cos((latitude * Math.PI) / 180) * TILES_ACROSS) / widthKm);
-  return { coordinates: { latitude, longitude }, zoom: Math.min(17, Math.max(10, Math.round(zoom * 10) / 10)) };
+  return { coordinates: { latitude, longitude }, zoom: zoomFor(widthKm, latitude) };
 }

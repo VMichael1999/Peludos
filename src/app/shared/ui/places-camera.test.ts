@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import type { Place } from '../../domain/models.ts';
-import { cameraFor } from './places-camera.ts';
+import { cameraFor, zoomFor } from './places-camera.ts';
 
 const place = (id: string, latitude?: number, longitude?: number): Place => ({
   id, name: id, kind: 'vet', tagline: '', distanceKm: 0, openLabel: '', open: true, rating: null, phone: '',
@@ -28,4 +28,10 @@ test('never zooms past street level, even for one place', () => {
 test('has no camera when no place has coordinates', () => {
   expect(cameraFor([place('a')])).toBeNull();
   expect(cameraFor([])).toBeNull();
+});
+
+test('zooms in as the width to show shrinks, within street and city levels', () => {
+  expect(zoomFor(1, -12)).toBeGreaterThan(zoomFor(10, -12));
+  expect(zoomFor(0.01, -12)).toBe(17);
+  expect(zoomFor(5000, -12)).toBe(10);
 });
