@@ -1,7 +1,8 @@
-import type { AlertStatus, LostAlert } from '../../domain/models.ts';
+import type { AlertStatus, LostAlert, Species } from '../../domain/models.ts';
 
 export interface NewAlert {
   readonly petName: string;
+  readonly species: Species;
   readonly breed: string;
   readonly traits: string;
   readonly lastSeenAt: string;

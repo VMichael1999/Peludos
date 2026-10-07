@@ -72,6 +72,7 @@ export interface Sighting {
 export interface LostAlert {
   readonly id: string;
   readonly petName: string;
+  readonly species: Species;
   readonly breed: string;
   readonly traits: string;
   readonly lastSeenAt: string;
