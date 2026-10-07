@@ -76,6 +76,7 @@ export function toPlace(raw: GooglePlace, origin: Coordinates, radiusKm: number,
     rating: raw.rating ?? null,
     phone: raw.nationalPhoneNumber ?? '',
     pin: pinOf(origin, raw.location, radiusKm),
+    location: { latitude: raw.location.latitude, longitude: raw.location.longitude },
   };
 }
 

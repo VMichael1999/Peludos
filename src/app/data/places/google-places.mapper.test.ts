@@ -51,6 +51,12 @@ test('converts a Google place to the app\'s own', () => {
   expect(place.distanceKm).toBeLessThan(0.6);
 });
 
+test('keeps where the place really is, for the native map', () => {
+  const place = toPlace(raw, lima, 3, 'vet')!;
+
+  expect(place.location).toEqual({ latitude: raw.location!.latitude, longitude: raw.location!.longitude });
+});
+
 test('missing data is said plainly, never invented', () => {
   const place = toPlace({ id: 'x', displayName: { text: 'Sin datos' }, location: lima }, lima, 3, 'shop')!;
 

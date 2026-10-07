@@ -80,6 +80,8 @@ export interface Place {
   readonly rating: number | null;
   readonly phone: string;
   readonly pin: { readonly x: number; readonly y: number };
+  /** Where it really is. Sample places have none: they only have a spot on the drawn map. */
+  readonly location?: { readonly latitude: number; readonly longitude: number };
 }
 
 export interface Product {
