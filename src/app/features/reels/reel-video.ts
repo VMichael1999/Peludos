@@ -13,7 +13,7 @@ import { ExpoVideoView } from '../../shared/ui/expo-video-view.ts';
   imports: [ExpoVideoView, Pressable],
   template: `
     <pressable class="fill" accessibilityRole="button" accessibilityLabel="Pausar o reanudar el video" (press)="toggle()">
-      <expo-video class="fill" [player]="player.native" [nativeControls]="false" contentFit="cover" />
+      <expo-video class="fill" [player]="playerId" [nativeControls]="false" contentFit="cover" />
     </pressable>
   `,
   styles: `
@@ -34,6 +34,8 @@ export class ReelVideo {
   readonly url = input.required<string>();
 
   protected readonly player = videoPlayer(null);
+  /** What the native view takes in place of the player itself. */
+  protected readonly playerId = (this.player.native as unknown as { __expo_shared_object_id__: number }).__expo_shared_object_id__;
 
   constructor() {
     effect(() => {

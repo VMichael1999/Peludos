@@ -15,8 +15,12 @@ import { Component, input } from '@angular/core';
   },
 })
 export class ExpoVideoView {
-  /** The player from `videoPlayer()`, as `player.native`. */
-  readonly player = input.required<unknown>();
+  /**
+   * The player's shared-object id, not the player: `expo-video`'s own React view sends the id
+   * (`player.__expo_shared_object_id__`) and native resolves it. A player object is dropped on the
+   * way to the view, which then plays nothing.
+   */
+  readonly player = input.required<number>();
   readonly nativeControls = input(true);
   readonly contentFit = input<'contain' | 'cover' | 'fill'>('contain');
 }
