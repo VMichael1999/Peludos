@@ -3,7 +3,7 @@ import type { Species } from '../../domain/models.ts';
 import { PetPhotosRepository } from './pet-photos.repository.ts';
 
 /** How many photos of each species are fetched, once, to hand out as portraits and galleries. */
-const POOL = 40;
+const POOL = 80;
 /** Portraits are the first photos of the pool and galleries the rest, so a pet's portrait is never in its own gallery. */
 const PORTRAITS = 20;
 
