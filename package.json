@@ -19,6 +19,7 @@
     "@ng-native/router": "^0.5.0",
     "@react-native-async-storage/async-storage": "2.2.0",
     "expo": "~57.0.26",
+    "expo-build-properties": "~57.0.22",
     "expo-constants": "~57.0.21",
     "expo-font": "~57.0.4",
     "expo-local-authentication": "~57.0.3",
