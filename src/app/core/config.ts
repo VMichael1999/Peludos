@@ -19,3 +19,9 @@ export const LIVE_DATA = new InjectionToken<boolean>('LIVE_DATA', { factory: () 
  * the reels then keep their placeholders. Like the Maps key it travels inside the app.
  */
 export const PEXELS_API_KEY = new InjectionToken<string>('PEXELS_API_KEY', { factory: () => '' });
+
+/**
+ * The Pixabay key for the reels feed, provided by `main.ts` from `.env`. Empty when there is none,
+ * and the reels then show sample reels without video. It travels inside the app, like the others.
+ */
+export const PIXABAY_API_KEY = new InjectionToken<string>('PIXABAY_API_KEY', { factory: () => '' });

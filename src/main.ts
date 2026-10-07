@@ -11,7 +11,7 @@ import { registerExpoViews } from '@ng-native/expo';
 import { registerExpoMap } from '@ng-native/expo/map-view';
 import { loadFonts } from '@ng-native/expo/fonts';
 import { appProviders } from './app/app.providers.ts';
-import { LIVE_DATA, MAPS_API_KEY, PEXELS_API_KEY } from './app/core/config.ts';
+import { LIVE_DATA, MAPS_API_KEY, PEXELS_API_KEY, PIXABAY_API_KEY } from './app/core/config.ts';
 import { App } from './app/app.ts';
 
 registerPlatformComponents(Platform.OS);
@@ -32,6 +32,7 @@ AppRegistry.registerRunnable('main', async ({ rootTag }: { rootTag: number | str
       ...appProviders,
       { provide: MAPS_API_KEY, useValue: String(Constants.expoConfig?.extra?.['googleMapsApiKey'] ?? '') },
       { provide: PEXELS_API_KEY, useValue: String(Constants.expoConfig?.extra?.['pexelsApiKey'] ?? '') },
+      { provide: PIXABAY_API_KEY, useValue: String(Constants.expoConfig?.extra?.['pixabayApiKey'] ?? '') },
       { provide: LIVE_DATA, useValue: true },
     ],
     // Colours, as the integers the platform wants.
