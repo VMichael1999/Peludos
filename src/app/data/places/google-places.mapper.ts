@@ -76,5 +76,28 @@ export function toPlace(raw: GooglePlace, origin: Coordinates, radiusKm: number,
     rating: raw.rating ?? null,
     phone: raw.nationalPhoneNumber ?? '',
     pin: pinOf(origin, raw.location, radiusKm),
+    location: { latitude: raw.location.latitude, longitude: raw.location.longitude },
   };
+}
+
+/**
+ * Spreads pins out when the places are all close: pins are placed against the whole search radius,
+ * so a handful within a few hundred metres would sit on top of each other. The farthest of the given
+ * places is moved out toward the edge of the map, and the rest keep their proportions. Nothing
+ * moves when they already fill the map; the pins stay inside the frame.
+ */
+export function fitPins<T extends { readonly distanceKm: number; readonly pin: { readonly x: number; readonly y: number } }>(
+  places: readonly T[],
+  radiusKm: number,
+): T[] {
+  const farthest = Math.max(0, ...places.map((p) => p.distanceKm));
+  const scale = farthest > 0 ? Math.min(6, Math.max(1, radiusKm / farthest)) : 1;
+  if (scale === 1) return [...places];
+  return places.map((p) => ({
+    ...p,
+    pin: {
+      x: clamp(ME_ON_MAP.x + (p.pin.x - ME_ON_MAP.x) * scale, 6, 94),
+      y: clamp(ME_ON_MAP.y + (p.pin.y - ME_ON_MAP.y) * scale, 8, 90),
+    },
+  }));
 }

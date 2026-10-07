@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { ME_ON_MAP, type GooglePlace, distanceKm, kindOf, pinOf, toPlace } from './google-places.mapper.ts';
+import { ME_ON_MAP, type GooglePlace, distanceKm, fitPins, kindOf, pinOf, toPlace } from './google-places.mapper.ts';
 
 const lima = { latitude: -12.0464, longitude: -77.0428 };
 
@@ -51,6 +51,12 @@ test('converts a Google place to the app\'s own', () => {
   expect(place.distanceKm).toBeLessThan(0.6);
 });
 
+test('keeps where the place really is, for the native map', () => {
+  const place = toPlace(raw, lima, 3, 'vet')!;
+
+  expect(place.location).toEqual({ latitude: raw.location!.latitude, longitude: raw.location!.longitude });
+});
+
 test('missing data is said plainly, never invented', () => {
   const place = toPlace({ id: 'x', displayName: { text: 'Sin datos' }, location: lima }, lima, 3, 'shop')!;
 
@@ -68,4 +74,31 @@ test('a place without a position or a name is left out', () => {
 test('a text-search result keeps the kind that was searched for', () => {
   const groomer = toPlace({ ...raw, types: ['pet_store'] }, lima, 3, 'groomer', true)!;
   expect(groomer.kind).toBe('groomer');
+});
+
+const near = (id: string, distanceKm: number, x: number, y: number) => ({ id, distanceKm, pin: { x, y } });
+
+test('places that are all close are spread out over the map', () => {
+  const fitted = fitPins([near('a', 0.2, 48, 58), near('b', 0.5, 50, 56)], 3);
+
+  // The farthest was 0.5 km of a 3 km radius, so offsets grow six-fold (the cap).
+  expect(fitted[1]!.pin.x).toBeGreaterThan(50);
+  expect(fitted[1]!.pin.y).toBeLessThan(56);
+});
+
+test('places that already fill the radius are left where they are', () => {
+  const places = [near('a', 1, 60, 50), near('b', 3, 80, 40)];
+
+  expect(fitPins(places, 3)).toEqual(places);
+});
+
+test('spread pins stay inside the map and keep their order from the centre', () => {
+  const fitted = fitPins([near('a', 0.1, 47, 58), near('b', 0.3, 60, 30)], 3);
+
+  expect(fitted.every((p) => p.pin.x >= 6 && p.pin.x <= 94 && p.pin.y >= 8 && p.pin.y <= 90)).toBe(true);
+  expect(Math.abs(fitted[0]!.pin.x - 46)).toBeLessThan(Math.abs(fitted[1]!.pin.x - 46));
+});
+
+test('no places is no pins', () => {
+  expect(fitPins([], 3)).toEqual([]);
 });

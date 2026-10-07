@@ -1,6 +1,8 @@
 import { Component, input, output } from '@angular/core';
-import { Pressable, SafeAreaView, Text, View } from '@ng-native/components';
+import { Pressable, SafeAreaView, View } from '@ng-native/components';
 import type { IconName } from '../../core/icons.ts';
+import type { Species } from '../../domain/models.ts';
+import { AppAvatar } from './app-avatar.ts';
 import { AppIcon } from './app-icon.ts';
 
 export type TabId = 'home' | 'reels' | 'search' | 'alerts' | 'me';
@@ -27,7 +29,7 @@ const TABS: readonly TabSpec[] = [
  */
 @Component({
   selector: 'app-tab-bar',
-  imports: [AppIcon, Pressable, SafeAreaView, Text, View],
+  imports: [AppAvatar, AppIcon, Pressable, SafeAreaView, View],
   template: `
     <view class="bar" [attr.data-over]="over() || null">
       <safe-area-view [edges]="['bottom']">
@@ -51,7 +53,7 @@ const TABS: readonly TabSpec[] = [
                   />
                 } @else {
                   <view class="me" [attr.data-active]="active() === tab.id || null">
-                    <text class="me-initial">{{ initial() }}</text>
+                    <app-avatar [name]="name()" [species]="species()" [size]="30" />
                   </view>
                 }
               </view>
@@ -127,18 +129,15 @@ const TABS: readonly TabSpec[] = [
     .me[data-active] {
       border-color: var(--color-primary);
     }
-    .me-initial {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--color-primary);
-    }
   `,
 })
 export class AppTabBar {
   readonly active = input.required<TabId>();
   readonly over = input(false);
   readonly alertDot = input(false);
-  readonly initial = input('L');
+  /** The profile's pet: its portrait is the profile tab's icon, its initial until the photo arrives. */
+  readonly name = input('L');
+  readonly species = input<Species | null>(null);
   readonly select = output<TabId>();
 
   protected readonly tabs = TABS;

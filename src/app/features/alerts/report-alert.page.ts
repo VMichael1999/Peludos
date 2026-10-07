@@ -171,7 +171,7 @@ export class ReportAlertPage {
         this.busy.set(true);
         try {
           const { lastSeenAt, traits, phone } = this.data();
-          await this.store.report({ petName: pet.name, breed: pet.breed, traits, lastSeenAt, phone });
+          await this.store.report({ petName: pet.name, species: pet.species, breed: pet.breed, traits, lastSeenAt, phone });
           await this.nav.back();
         } catch {
           this.error.set('No pudimos publicar la alerta. Inténtalo de nuevo.');

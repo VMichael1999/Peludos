@@ -1,4 +1,5 @@
 import type { AppNotification, HealthRecord, LostAlert, Pet, Place, Post, Product, Story } from '../../domain/models.ts';
+import { GENERATED_POSTS } from './generated-posts.ts';
 
 /** Believable sample data, in Spanish, for the mock adapters. Nothing here is real. */
 
@@ -7,7 +8,7 @@ export const MY_PETS: readonly Pet[] = [
   { id: 'milo', name: 'Milo', species: 'cat', breed: 'Gato europeo', ageYears: 5, ownerName: 'Lucía', bio: 'Siesta profesional, de lunes a domingo.', posts: 21, followers: 480, following: 90 },
 ];
 
-export const POSTS: readonly Post[] = [
+const FEATURED_POSTS: readonly Post[] = [
   { id: 'p1', petName: 'Canela', species: 'dog', ownerName: 'Lucía', caption: 'Primer día de playa. Se negó a salir del agua.', minutesAgo: 120, likes: 128, comments: 14, liked: false, saved: false, tone: 'blue', kind: 'photo' },
   { id: 'p2', petName: 'Max', species: 'dog', ownerName: 'Marco', caption: 'Aprendió a abrir la puerta solo. Ahora vivimos con candado.', minutesAgo: 300, likes: 2400, comments: 86, liked: true, saved: false, tone: 'warm', kind: 'reel' },
   { id: 'p3', petName: 'Luna', species: 'cat', ownerName: 'Valeria', caption: 'Domingo de sol y cero planes.', minutesAgo: 1560, likes: 342, comments: 27, liked: false, saved: true, tone: 'border', kind: 'photo' },
@@ -19,33 +20,36 @@ export const POSTS: readonly Post[] = [
   { id: 'p9', petName: 'Nala', species: 'cat', ownerName: 'Camila', caption: 'El salto imposible, a cámara lenta.', minutesAgo: 1800, likes: 980, comments: 47, liked: true, saved: false, tone: 'warm', kind: 'reel' },
 ];
 
+/** The hand-written posts plus the generated ones that fill the feed out to 25 dogs and 25 cats, newest first. */
+export const POSTS: readonly Post[] = [...FEATURED_POSTS, ...GENERATED_POSTS].sort((a, b) => a.minutesAgo - b.minutesAgo);
+
 export const STORIES: readonly Story[] = [
-  { id: 's0', petName: 'Tu historia', mine: true },
-  { id: 's1', petName: 'Canela', mine: false },
-  { id: 's2', petName: 'Luna', mine: false },
-  { id: 's3', petName: 'Max', mine: false },
-  { id: 's4', petName: 'Nala', mine: false },
-  { id: 's5', petName: 'Rocky', mine: false },
+  { id: 's0', petName: 'Tu historia', species: 'dog', mine: true },
+  { id: 's1', petName: 'Canela', species: 'dog', mine: false },
+  { id: 's2', petName: 'Luna', species: 'cat', mine: false },
+  { id: 's3', petName: 'Max', species: 'dog', mine: false },
+  { id: 's4', petName: 'Nala', species: 'cat', mine: false },
+  { id: 's5', petName: 'Rocky', species: 'dog', mine: false },
 ];
 
 export const ALERTS: readonly LostAlert[] = [
   {
-    id: 'a1', petName: 'Toby', breed: 'Golden retriever', traits: 'Golden retriever · 4 años · collar rojo · responde a su nombre',
+    id: 'a1', species: 'dog', petName: 'Toby', breed: 'Golden retriever', traits: 'Golden retriever · 4 años · collar rojo · responde a su nombre',
     lastSeenAt: 'Parque Central', phone: '+51 900 000 001', minutesAgo: 25, status: 'lost', distanceKm: 0.8, pin: { x: 62, y: 40 },
     sightings: [{ id: 'v1', by: 'Marco', where: 'cerca de la panadería', minutesAgo: 8 }],
   },
   {
-    id: 'a2', petName: 'Luna', breed: 'Gata carey', traits: 'Gata carey · 2 años · muy asustadiza · no tiene collar',
+    id: 'a2', species: 'cat', petName: 'Luna', breed: 'Gata carey', traits: 'Gata carey · 2 años · muy asustadiza · no tiene collar',
     lastSeenAt: 'Av. Los Olivos', phone: '+51 900 000 001', minutesAgo: 180, status: 'lost', distanceKm: 1.5, pin: { x: 30, y: 68 },
     sightings: [],
   },
   {
-    id: 'a3', petName: 'Rocky', breed: 'Mestizo', traits: 'Mestizo · 6 años · mancha negra en el ojo',
+    id: 'a3', species: 'dog', petName: 'Rocky', breed: 'Mestizo', traits: 'Mestizo · 6 años · mancha negra en el ojo',
     lastSeenAt: 'Parque de las Flores', phone: '+51 900 000 001', minutesAgo: 1500, status: 'found', distanceKm: 2.2, pin: { x: 74, y: 78 },
     sightings: [],
   },
   {
-    id: 'a4', petName: 'Nala', breed: 'Siamesa', traits: 'Siamesa · 3 años · ojos azules',
+    id: 'a4', species: 'cat', petName: 'Nala', breed: 'Siamesa', traits: 'Siamesa · 3 años · ojos azules',
     lastSeenAt: 'Calle Los Cedros', phone: '+51 900 000 001', minutesAgo: 2880, status: 'found', distanceKm: 1.9, pin: { x: 20, y: 34 },
     sightings: [],
   },

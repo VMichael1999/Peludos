@@ -3,7 +3,7 @@ import { MockAlertsRepository } from './mock-alerts.repository.ts';
 
 test('a reported pet shows up first among the lost ones', async () => {
   const repo = new MockAlertsRepository();
-  const alert = await repo.report({ petName: 'Canela', breed: 'Beagle', traits: 'Collar azul', lastSeenAt: 'Parque', phone: '999111222' });
+  const alert = await repo.report({ petName: 'Canela', species: 'dog', breed: 'Beagle', traits: 'Collar azul', lastSeenAt: 'Parque', phone: '999111222' });
 
   const lost = await repo.list('lost');
   expect(lost[0]?.id).toBe(alert.id);

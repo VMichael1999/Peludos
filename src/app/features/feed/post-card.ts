@@ -14,7 +14,7 @@ import { AppPhoto } from '../../shared/ui/app-photo.ts';
   template: `
     <view class="card">
       <view class="head">
-        <app-avatar [name]="post().petName" [size]="44" />
+        <app-avatar [name]="post().petName" [species]="post().species" [size]="44" />
         <view class="who">
           <text class="name">{{ post().petName }}</text>
           <text class="meta">de {{ post().ownerName }} · {{ when() }}</text>

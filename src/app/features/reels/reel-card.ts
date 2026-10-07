@@ -1,9 +1,10 @@
 import { Component, computed, input, output, signal } from '@angular/core';
-import { Pressable, Text, View } from '@ng-native/components';
+import { Image, Pressable, Text, View } from '@ng-native/components';
 import { compact } from '../../domain/format.ts';
 import type { Post } from '../../domain/models.ts';
 import { AppAvatar } from '../../shared/ui/app-avatar.ts';
 import { AppIcon } from '../../shared/ui/app-icon.ts';
+import { ReelVideo } from './reel-video.ts';
 
 /**
  * One full-screen reel. The video is a placeholder until a video source is wired in; the layout,
@@ -12,10 +13,22 @@ import { AppIcon } from '../../shared/ui/app-icon.ts';
  */
 @Component({
   selector: 'app-reel-card',
-  imports: [AppAvatar, AppIcon, Pressable, Text, View],
+  imports: [AppAvatar, AppIcon, Image, Pressable, ReelVideo, Text, View],
   template: `
     <view class="reel" [style]="{ height: height() }">
-      <view class="video"><text class="video-label">Video vertical</text></view>
+      <view class="video">
+        @if (post().photoUrl; as poster) {
+          <image class="poster" [src]="poster" alt="" resizeMode="cover" />
+        } @else {
+          <text class="video-label">Video vertical</text>
+        }
+      </view>
+      @if ((playing() || preload()) && post().videoUrl; as url) {
+        <app-reel-video [url]="url" [active]="playing()" [muted]="muted()" (failed)="failed.set(true)" />
+      }
+      @if (failed()) {
+        <text class="failed" accessibilityRole="alert">No pudimos reproducir este video.</text>
+      }
       <view class="scrim"></view>
 
       <view class="rail">
@@ -38,7 +51,7 @@ import { AppIcon } from '../../shared/ui/app-icon.ts';
 
       <view class="caption">
         <view class="who">
-          <app-avatar [name]="post().petName" [size]="32" />
+          <app-avatar [name]="post().petName" [species]="post().species" [size]="32" />
           <text class="pet">{{ post().petName }}</text>
           <pressable class="follow" accessibilityRole="button" [accessibilityLabel]="following() ? 'Siguiendo a ' + post().petName : 'Seguir a ' + post().petName" (press)="following.set(!following())">
             <text class="follow-text">{{ following() ? 'Siguiendo' : 'Seguir' }}</text>
@@ -57,6 +70,23 @@ import { AppIcon } from '../../shared/ui/app-icon.ts';
       align-items: center;
       justify-content: center;
       background-image: linear-gradient(160deg, #1b2d52, #0a0f1a);
+    }
+    .poster {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .failed {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: #ffffff;
     }
     .video-label {
       font-size: var(--text-sm);
@@ -128,6 +158,12 @@ import { AppIcon } from '../../shared/ui/app-icon.ts';
 export class ReelCard {
   readonly post = input.required<Post>();
   readonly height = input.required<number>();
+  /** True for the reel on screen: it plays. */
+  readonly playing = input(false);
+  /** True for the reel after it: it loads and waits. No other reel mounts a player, so they cost nothing. */
+  readonly preload = input(false);
+  readonly muted = input(false);
+  protected readonly failed = signal(false);
   readonly like = output<Post>();
   readonly save = output<Post>();
   readonly share = output<Post>();

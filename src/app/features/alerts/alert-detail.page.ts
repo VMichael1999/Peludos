@@ -1,8 +1,12 @@
-import { Component, inject, input, resource, signal } from '@angular/core';
+import { Component, computed, inject, input, resource, signal } from '@angular/core';
 import { ScrollView, Text, View } from '@ng-native/components';
 import { DeepLinks, Sharing } from '@ng-native/device';
+import { alertLocation } from '../../data/alerts/alert-location.ts';
 import { AlertsRepository } from '../../data/alerts/alerts.repository.ts';
+import { UserLocation } from '../../data/location/user-location.ts';
+import { PetPortraits } from '../../data/photos/pet-portraits.ts';
 import { ago, distance } from '../../domain/format.ts';
+import { AppAlertsMap, type AlertOnMap } from '../../shared/ui/app-alerts-map.ts';
 import { AppButton } from '../../shared/ui/app-button.ts';
 import { AppIcon } from '../../shared/ui/app-icon.ts';
 import { AppIconButton } from '../../shared/ui/app-icon-button.ts';
@@ -17,7 +21,7 @@ import { AlertsStore } from './alerts.store.ts';
 
 @Component({
   selector: 'app-alert-detail-page',
-  imports: [AppButton, AppIcon, AppIconButton, AppMapSurface, AppNavBar, AppPhoto, AppScreen, AppSkeleton, AppState, AppTag, ScrollView, Text, View],
+  imports: [AppAlertsMap, AppButton, AppIcon, AppIconButton, AppMapSurface, AppNavBar, AppPhoto, AppScreen, AppSkeleton, AppState, AppTag, ScrollView, Text, View],
   template: `
     <app-screen>
       <app-nav-bar title="Alerta">
@@ -34,7 +38,7 @@ import { AlertsStore } from './alerts.store.ts';
         <app-state icon="wifiOff" title="No encontramos esta alerta" message="Puede que ya se haya resuelto o que no tengas conexión." action="Reintentar" actionVariant="primary" [bad]="true" (act)="alert.reload()" />
       } @else if (alert.value(); as a) {
         <scroll-view class="fill" [contentContainerStyle]="{ paddingBottom: 16 }">
-          <view class="hero"><app-photo [tone]="a.status === 'lost' ? 'blue' : 'warm'" [caption]="'Foto de ' + a.petName" /></view>
+          <view class="hero"><app-photo [tone]="a.status === 'lost' ? 'blue' : 'warm'" [src]="portraits.portrait(a.petName, a.species)" [alt]="'Foto de ' + a.petName" [caption]="'Foto de ' + a.petName" /></view>
           <view class="head">
             <app-tag [kind]="a.status === 'lost' ? 'danger' : 'success'" [label]="a.status === 'lost' ? 'Perdido ' + when(a.minutesAgo) : '¡Encontrado! ' + when(a.minutesAgo)" />
             <text class="name">{{ a.petName }}</text>
@@ -42,7 +46,11 @@ import { AlertsStore } from './alerts.store.ts';
             <text class="traits">{{ a.status === 'lost' ? 'Visto por última vez en ' : 'Encontrado en ' }}{{ a.lastSeenAt }} · a {{ km(a.distanceKm) }}</text>
           </view>
           <view class="map">
-            <app-map-surface [height]="92" [radius]="70" [pins]="[{ id: a.id, x: 50, y: 62, kind: a.status }]" />
+            @if (onMap(); as spot) {
+              <app-alerts-map [alerts]="[spot]" [origin]="spot.location" [radiusKm]="0.4" [height]="170" />
+            } @else {
+              <app-map-surface [height]="92" [radius]="70" [pins]="[{ id: a.id, x: 50, y: 62, kind: a.status }]" />
+            }
           </view>
 
           <text class="section">Avistamientos ({{ a.sightings.length }})</text>
@@ -154,6 +162,15 @@ export class AlertDetailPage {
   /** Bound from the `alert/:id` route. */
   readonly id = input.required<string>();
   protected readonly busy = signal(false);
+  protected readonly portraits = inject(PetPortraits);
+  private readonly here = inject(UserLocation).here;
+
+  /** The alert on the real map, once the device has said where the person is: the map is centred on the alert. */
+  protected readonly onMap = computed<AlertOnMap | null>(() => {
+    const origin = this.here();
+    const a = this.alert.value();
+    return origin && a ? { id: a.id, petName: a.petName, status: a.status, location: alertLocation(origin, a) } : null;
+  });
 
   protected readonly alert = resource({
     params: () => this.id(),

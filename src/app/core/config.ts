@@ -13,3 +13,9 @@ export const MAPS_API_KEY = new InjectionToken<string>('MAPS_API_KEY', { factory
  * reach out to a network.
  */
 export const LIVE_DATA = new InjectionToken<boolean>('LIVE_DATA', { factory: () => false });
+
+/**
+ * The Pixabay key for the reels feed, provided by `main.ts` from `.env`. Empty when there is none,
+ * and the reels then show sample reels without video. It travels inside the app, like the others.
+ */
+export const PIXABAY_API_KEY = new InjectionToken<string>('PIXABAY_API_KEY', { factory: () => '' });

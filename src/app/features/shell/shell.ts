@@ -8,6 +8,7 @@ import { AlertsStore } from '../alerts/alerts.store.ts';
 import { HomePage } from '../feed/home.page.ts';
 import { ExplorePage } from '../explore/explore.page.ts';
 import { ProfilePage } from '../profile/profile.page.ts';
+import { ProfileStore } from '../profile/profile.store.ts';
 import { ReelsPage } from '../reels/reels.page.ts';
 
 /**
@@ -31,7 +32,8 @@ import { ReelsPage } from '../reels/reels.page.ts';
         [active]="tab()"
         [over]="tab() === 'reels'"
         [alertDot]="hasNearbyAlert()"
-        [initial]="initial()"
+        [name]="profileName()"
+        [species]="profileSpecies()"
         (select)="tab.set($event)"
       />
     </app-screen>
@@ -54,7 +56,10 @@ export class Shell {
 
   protected readonly tab = signal<TabId>('home');
   protected readonly hasNearbyAlert = computed(() => this.alerts.nearest() !== undefined);
-  protected readonly initial = computed(() => (this.session.user()?.username ?? 'L').charAt(0).toUpperCase());
+  private readonly profile = inject(ProfileStore);
+  /** The tab shows the pet the profile is on, or the person's initial until pets have loaded. */
+  protected readonly profileName = computed(() => this.profile.current()?.name ?? this.session.user()?.username ?? 'L');
+  protected readonly profileSpecies = computed(() => this.profile.current()?.species ?? null);
 
   protected show(id: TabId) {
     return this.tab() === id ? { flex: 1, display: 'flex' as const } : { flex: 1, display: 'none' as const };

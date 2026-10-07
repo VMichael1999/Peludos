@@ -31,12 +31,43 @@ export interface Post {
   readonly kind: 'photo' | 'reel';
   /** The real photo, when there is one; the card shows its gradient placeholder until then, or without it. */
   readonly photoUrl?: string;
+  /** A reel's video, when there is one; the reel shows its dark placeholder until then, or without it. */
+  readonly videoUrl?: string;
+}
+
+/** A video for the reels feed, whichever service it came from. */
+export interface ReelVideo {
+  readonly id: string;
+  /** Seconds. */
+  readonly duration: number;
+  /** A still of the video: shown while it loads. */
+  readonly thumbnail: string;
+  /** What to play. Null for the sample reels, which have no video. */
+  readonly videoUrl: string | null;
+  readonly width: number;
+  readonly height: number;
+  /** Who made it. */
+  readonly user: string;
+  readonly tags: readonly string[];
+  readonly views: number;
+  readonly likes: number;
 }
 
 export interface Story {
   readonly id: string;
   readonly petName: string;
+  readonly species: Species;
   readonly mine: boolean;
+}
+
+/** One page of a story: a photo or a video, shown for a few seconds. */
+export interface StoryItem {
+  readonly id: string;
+  readonly kind: 'photo' | 'video';
+  readonly url: string;
+  readonly caption: string;
+  /** How long it stays on screen before the next one. */
+  readonly seconds: number;
 }
 
 export type AlertStatus = 'lost' | 'found';
@@ -51,6 +82,7 @@ export interface Sighting {
 export interface LostAlert {
   readonly id: string;
   readonly petName: string;
+  readonly species: Species;
   readonly breed: string;
   readonly traits: string;
   readonly lastSeenAt: string;
@@ -78,6 +110,8 @@ export interface Place {
   readonly rating: number | null;
   readonly phone: string;
   readonly pin: { readonly x: number; readonly y: number };
+  /** Where it really is. Sample places have none: they only have a spot on the drawn map. */
+  readonly location?: { readonly latitude: number; readonly longitude: number };
 }
 
 export interface Product {

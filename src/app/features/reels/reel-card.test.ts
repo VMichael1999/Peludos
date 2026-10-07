@@ -30,3 +30,23 @@ test('liking and sharing are reported to the page; following is local', async ()
   expect(share).toHaveBeenCalledWith(post);
   expect(screen.getByRole('button', { name: 'Siguiendo a Max' })).toBeTruthy();
 });
+
+test('a reel that is not on screen mounts no video, even if it has one', async () => {
+  // Mounting a video needs the native player, which the test environment does not have: if this
+  // rendered one, the render would throw.
+  await render(ReelCard, { inputs: { post: { ...post, videoUrl: 'https://v.example/a.mp4' }, height: 700, playing: false } });
+
+  expect(screen.getByText('Video vertical')).toBeTruthy();
+});
+
+test('shows the poster in place of the placeholder when the reel has one', async () => {
+  await render(ReelCard, { inputs: { post: { ...post, photoUrl: 'https://t.example/a.jpg' }, height: 700 } });
+
+  expect(screen.queryByText('Video vertical')).toBeNull();
+});
+
+test('keeps the placeholder for a reel with no poster or video', async () => {
+  await render(ReelCard, { inputs: { post, height: 700 } });
+
+  expect(screen.getByText('Video vertical')).toBeTruthy();
+});
