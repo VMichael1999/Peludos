@@ -66,14 +66,14 @@ const HEIGHTS = [150, 110, 190, 130, 170, 120, 160, 140, 180];
           <view class="column">
             @for (post of left(); track post.id) {
               <view class="tile" accessibilityRole="image" [accessibilityLabel]="post.petName + ': ' + post.caption" [style]="{ height: heightOf(post) }">
-                <app-photo [tone]="post.tone" />
+                <app-photo [tone]="post.tone" [src]="post.photoUrl" />
               </view>
             }
           </view>
           <view class="column">
             @for (post of right(); track post.id) {
               <view class="tile" accessibilityRole="image" [accessibilityLabel]="post.petName + ': ' + post.caption" [style]="{ height: heightOf(post) }">
-                <app-photo [tone]="post.tone" />
+                <app-photo [tone]="post.tone" [src]="post.photoUrl" />
               </view>
             }
           </view>

@@ -21,7 +21,7 @@ import { AppPhoto } from '../../shared/ui/app-photo.ts';
         </view>
         <app-icon-button label="Más opciones"><app-icon name="more" [size]="28" /></app-icon-button>
       </view>
-      <view class="photo"><app-photo [tone]="post().tone" [caption]="post().kind === 'reel' ? 'Reel' : 'Foto'" /></view>
+      <view class="photo"><app-photo [tone]="post().tone" [src]="post().photoUrl" [alt]="post().petName + ': ' + post().caption" [caption]="post().kind === 'reel' ? 'Reel' : 'Foto'" /></view>
       <view class="acts">
         <app-icon-button [label]="post().liked ? 'Quitar me gusta' : 'Me gusta'" (press)="like.emit()">
           <app-icon name="heart" [size]="30" [tone]="post().liked ? 'danger' : 'text'" [fillTone]="post().liked ? 'danger' : null" />

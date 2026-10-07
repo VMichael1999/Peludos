@@ -2,7 +2,7 @@ import { type EnvironmentProviders, type Provider, inject } from '@angular/core'
 import { withComponentInputBinding } from '@angular/router';
 import { provideNativeHttpClient } from '@ng-native/platform/http';
 import { provideNativeRouter } from '@ng-native/router';
-import { MAPS_API_KEY } from './core/config.ts';
+import { LIVE_DATA, MAPS_API_KEY } from './core/config.ts';
 import { routes } from './app.routes.ts';
 import { AuthRepository } from './data/auth/auth.repository.ts';
 import { MockAuthRepository } from './data/auth/mock-auth.repository.ts';
@@ -19,7 +19,11 @@ import { GooglePlacesRepository } from './data/places/google-places.repository.t
 import { MockPlacesRepository } from './data/places/mock-places.repository.ts';
 import { PlacesRepository } from './data/places/places.repository.ts';
 import { PostsRepository } from './data/posts/posts.repository.ts';
+import { DogCeoPhotosRepository } from './data/photos/dog-ceo-photos.repository.ts';
+import { MockPetPhotosRepository } from './data/photos/mock-pet-photos.repository.ts';
+import { PetPhotosRepository } from './data/photos/pet-photos.repository.ts';
 import { MockPostsRepository } from './data/posts/mock-posts.repository.ts';
+import { PhotoPostsRepository } from './data/posts/photo-posts.repository.ts';
 
 /**
  * The composition root: where each port gets the adapter behind it. Swapping the mock backend for
@@ -28,7 +32,18 @@ import { MockPostsRepository } from './data/posts/mock-posts.repository.ts';
 export const appProviders: (Provider | EnvironmentProviders)[] = [
   provideNativeRouter(routes, withComponentInputBinding()),
   { provide: AuthRepository, useClass: MockAuthRepository },
-  { provide: PostsRepository, useClass: MockPostsRepository },
+  MockPostsRepository,
+  MockPetPhotosRepository,
+  DogCeoPhotosRepository,
+  {
+    // Dog photos come from Dog CEO in the running app; tests and offline builds get none.
+    provide: PetPhotosRepository,
+    useFactory: () => (inject(LIVE_DATA) ? inject(DogCeoPhotosRepository) : inject(MockPetPhotosRepository)),
+  },
+  {
+    provide: PostsRepository,
+    useFactory: () => new PhotoPostsRepository(inject(MockPostsRepository), inject(PetPhotosRepository)),
+  },
   { provide: AlertsRepository, useClass: MockAlertsRepository },
   provideNativeHttpClient(),
   MockPlacesRepository,
