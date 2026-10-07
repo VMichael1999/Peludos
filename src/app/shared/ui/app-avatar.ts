@@ -12,7 +12,7 @@ import type { Species } from '../../domain/models.ts';
   selector: 'app-avatar',
   imports: [Image, Text, View],
   template: `
-    <view class="ring" [attr.data-ring]="ring() || null" [style]="ringStyle()">
+    <view class="ring" [attr.data-ring]="ring() || null" [attr.data-seen]="seen() || null" [style]="ringStyle()">
       <view class="disc" [style]="discStyle()">
         <text class="initials" [style]="initialsStyle()">{{ initials() }}</text>
         @if (portrait(); as src) {
@@ -32,6 +32,9 @@ import type { Species } from '../../domain/models.ts';
     .ring[data-ring] {
       border-width: 2.5px;
       border-color: var(--color-accent);
+    }
+    .ring[data-seen] {
+      border-color: var(--color-border);
     }
     .disc {
       overflow: hidden;
@@ -56,6 +59,8 @@ export class AppAvatar {
   readonly name = input.required<string>();
   readonly size = input(48);
   readonly ring = input(false);
+  /** A watched story: its ring is grey instead of gold. */
+  readonly seen = input(false);
   /** Set for a pet: its portrait is shown. */
   readonly species = input<Species | null>(null);
 
