@@ -56,7 +56,7 @@ La clave viaja dentro de la app, así que **restríngela** en Google Cloud a las
 
 ### Mapa nativo
 
-El directorio usa el mapa real, `expo-maps`: Apple Maps en iOS (sin clave) y Google Maps en Android (con `GOOGLE_MAPS_API_KEY`). Muestra los 15 lugares más cercanos con un color por tipo (veterinaria, tienda, peluquería) y tu posición; tocar un marcador abre el lugar. Sin coordenadas reales (lugares de ejemplo) o en Expo Go, que no incluye el módulo, se queda el mapa dibujado.
+El directorio de tiendas y la pantalla de Alertas usan el mapa real, `expo-maps`: Apple Maps en iOS (sin clave) y Google Maps en Android (con `GOOGLE_MAPS_API_KEY`). Muestra los 15 lugares más cercanos con un color por tipo (veterinaria, tienda, peluquería) y tu posición; tocar un marcador abre el lugar. En Alertas muestra tu posición, el radio de aviso de 3 km y un marcador rojo por mascota perdida o verde por encontrada; el botón de ubicación vuelve a centrar el mapa. Las alertas de ejemplo se colocan a su distancia de tu posición real, y las alertas reales traerán sus coordenadas. Sin coordenadas reales (lugares de ejemplo) o en Expo Go, que no incluye el módulo, se queda el mapa dibujado.
 
 - Exige **iOS 18** o superior, que ya está en `app.json` (`expo-build-properties`).
 - `expo run:ios` falla si la ruta del proyecto tiene **espacios** (por ejemplo `Angular Native`): un script de Expo no las entrecomilla. Compila desde una ruta sin espacios.
@@ -115,7 +115,8 @@ Todo está en [`docs/`](docs): el [plan de acción](docs/plan-de-accion.md), la 
 - [x] Feed de reels con videos de Pixabay: categorías, paginación, sonido y precarga (ver "Videos de los reels")
 - [ ] Selector de fotos y cámara al crear publicaciones
 - [x] Mapa nativo (Apple Maps en iOS) en el directorio de tiendas
-- [ ] Mapa nativo también en Alertas
+- [x] Mapa nativo también en Alertas
+- [ ] Mapa nativo en el detalle de una alerta y al reportar una
 - [ ] Backend real, con tiendas afiliadas y catálogo propio
 - [ ] Comentarios, chat con tiendas y notificaciones push
 - [ ] Editar perfil y añadir mascotas
