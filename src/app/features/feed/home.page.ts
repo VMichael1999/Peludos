@@ -4,6 +4,7 @@ import { Dialogs } from '@ng-native/device';
 import { NativeNavigation } from '@ng-native/router';
 import { APP_NAME } from '../../core/brand.ts';
 import { ago, distance } from '../../domain/format.ts';
+import type { Story } from '../../domain/models.ts';
 import { AppAvatar } from '../../shared/ui/app-avatar.ts';
 import { AppIcon } from '../../shared/ui/app-icon.ts';
 import { AppIconButton } from '../../shared/ui/app-icon-button.ts';
@@ -11,6 +12,7 @@ import { AppLogo } from '../../shared/ui/app-logo.ts';
 import { AppSkeleton } from '../../shared/ui/app-skeleton.ts';
 import { AppState } from '../../shared/ui/app-state.ts';
 import { AlertsStore } from '../alerts/alerts.store.ts';
+import { StoriesStore } from '../stories/stories.store.ts';
 import { FeedStore } from './feed.store.ts';
 import { PostCard } from './post-card.ts';
 
@@ -82,10 +84,10 @@ import { PostCard } from './post-card.ts';
           <view listHeader>
             <scroll-view class="stories-row" [horizontal]="true" [showsHorizontalScrollIndicator]="false" [contentContainerStyle]="{ gap: 16, paddingHorizontal: 16, paddingTop: 8, paddingBottom: 12 }">
               @for (story of stories(); track story.id) {
-                <view class="story">
-                  <app-avatar [name]="story.mine ? '+' : story.petName" [species]="story.mine ? null : story.species" [size]="story.mine ? 74 : 64" [ring]="!story.mine" />
+                <pressable class="story" accessibilityRole="button" [accessibilityLabel]="story.mine ? 'Añadir a tu historia' : 'Ver la historia de ' + story.petName" (press)="openStory(story)">
+                  <app-avatar [name]="story.mine ? '+' : story.petName" [species]="story.mine ? null : story.species" [size]="story.mine ? 74 : 64" [ring]="!story.mine" [seen]="watched.seen(story.id)" />
                   <text class="story-name" numberOfLines="2">{{ story.petName }}</text>
-                </view>
+                </pressable>
               }
             </scroll-view>
             @if (alerts.nearest(); as nearest) {
@@ -206,12 +208,18 @@ export class HomePage {
   protected readonly feed = inject(FeedStore);
   protected readonly alerts = inject(AlertsStore);
   private readonly dialogs = inject(Dialogs);
+  protected readonly watched = inject(StoriesStore);
 
   protected readonly name = APP_NAME;
   protected readonly stories = computed(() => this.feed.stories.data() ?? []);
   protected readonly idOf = (post: { id: string }): string => post.id;
   protected readonly km = distance;
   protected readonly when = ago;
+
+  /** Someone else's story opens full screen; "Tu historia" goes to making a post, which is how a story is added for now. */
+  protected openStory(story: Story): void {
+    void this.nav.push(story.mine ? '/create' : '/story/' + story.id);
+  }
 
   protected messages(): void {
     void this.dialogs.tell('Mensajes', 'Los mensajes directos llegarán en una próxima etapa.');
