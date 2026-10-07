@@ -82,6 +82,10 @@ La vista nativa de video necesita que se le pase el **id** del reproductor (`__e
 
 Pixabay pide, con cariño, mencionar la fuente: cada reel muestra al autor del video.
 
+## Historias
+
+Tocar un perfil de la fila superior de Inicio abre su historia a pantalla completa: sus publicaciones más recientes como fotos, con un par de videos de Pixabay entre ellas. Hay una barra de progreso por página; un toque a la derecha avanza, a la izquierda vuelve, y la última página cierra la historia. Una historia vista pone gris su aro. «Tu historia» lleva a crear una publicación, que por ahora es la forma de añadir una. La fila de historias desliza de lado.
+
 ## Fotos de las mascotas
 
 Con `PIXABAY_API_KEY` (la misma de los reels), las fotos de mascotas vienen de [Pixabay](https://pixabay.com/api/docs/); sin ella, de Dog CEO (perros) y The Cat API (gatos). `PetPortraits` reparte un retrato por mascota, **el mismo en todas las pantallas**: historias, publicaciones, reels, perfil, selector de mascotas y alertas. Cada nombre toma el siguiente retrato libre de un conjunto que se pide una vez por especie, y la galería del perfil sale del resto del conjunto, así el retrato no se repite en su galería. Las fotos son aleatorias y no coinciden con la raza escrita (una «Golden retriever» puede salir como otra raza); el retrato dura lo que dura la sesión.
@@ -123,6 +127,8 @@ Todo está en [`docs/`](docs): el [plan de acción](docs/plan-de-accion.md), la 
 - [x] Mapa nativo (Apple Maps en iOS) en el directorio de tiendas
 - [x] Mapa nativo también en Alertas
 - [x] Fotos de mascotas en historias, perfil, publicaciones y alertas
+- [x] Historias a pantalla completa con fotos y videos
+- [ ] Crear una historia propia
 - [x] Mapa nativo en el detalle de una alerta
 - [ ] Mapa nativo al reportar una alerta
 - [ ] Backend real, con tiendas afiliadas y catálogo propio
