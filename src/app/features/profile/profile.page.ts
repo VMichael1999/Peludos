@@ -48,7 +48,7 @@ const TABS: readonly { readonly id: ProfileTab; readonly icon: IconName; readonl
         @if (store.current(); as pet) {
           <scroll-view class="fill" [contentContainerStyle]="{ paddingBottom: 24 }">
             <view class="head">
-              <app-avatar [name]="pet.name" [size]="86" [ring]="true" />
+              <app-avatar [name]="pet.name" [species]="pet.species" [size]="86" [ring]="true" />
               <view class="stats">
                 <view class="stat"><text class="stat-n">{{ pet.posts }}</text><text class="stat-l">Posts</text></view>
                 <view class="stat"><text class="stat-n">{{ count(pet.followers) }}</text><text class="stat-l">Seguidores</text></view>
@@ -74,7 +74,7 @@ const TABS: readonly { readonly id: ProfileTab; readonly icon: IconName; readonl
                   [accessibilityState]="{ selected: other.id === pet.id }"
                   (press)="store.select(other.id)"
                 >
-                  <app-avatar [name]="other.name" [size]="40" [ring]="other.id === pet.id" />
+                  <app-avatar [name]="other.name" [species]="other.species" [size]="40" [ring]="other.id === pet.id" />
                 </pressable>
               }
             </view>

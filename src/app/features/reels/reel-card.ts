@@ -51,7 +51,7 @@ import { ReelVideo } from './reel-video.ts';
 
       <view class="caption">
         <view class="who">
-          <app-avatar [name]="post().petName" [size]="32" />
+          <app-avatar [name]="post().petName" [species]="post().species" [size]="32" />
           <text class="pet">{{ post().petName }}</text>
           <pressable class="follow" accessibilityRole="button" [accessibilityLabel]="following() ? 'Siguiendo a ' + post().petName : 'Seguir a ' + post().petName" (press)="following.set(!following())">
             <text class="follow-text">{{ following() ? 'Siguiendo' : 'Seguir' }}</text>

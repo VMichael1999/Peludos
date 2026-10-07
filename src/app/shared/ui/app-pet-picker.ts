@@ -18,7 +18,7 @@ import { AppAvatar } from './app-avatar.ts';
           [attr.data-selected]="selectedId() === pet.id || null"
           (press)="choose.emit(pet.id)"
         >
-          <app-avatar [name]="pet.name" [size]="32" />
+          <app-avatar [name]="pet.name" [species]="pet.species" [size]="32" />
           <text class="name">{{ pet.name }}</text>
         </pressable>
       }

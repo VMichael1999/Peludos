@@ -83,7 +83,7 @@ import { PostCard } from './post-card.ts';
             <view class="stories">
               @for (story of stories(); track story.id) {
                 <view class="story">
-                  <app-avatar [name]="story.mine ? '+' : story.petName" [size]="story.mine ? 74 : 64" [ring]="!story.mine" />
+                  <app-avatar [name]="story.mine ? '+' : story.petName" [species]="story.mine ? null : story.species" [size]="story.mine ? 74 : 64" [ring]="!story.mine" />
                   <text class="story-name" numberOfLines="2">{{ story.petName }}</text>
                 </view>
               }

@@ -24,12 +24,12 @@ const FEATURED_POSTS: readonly Post[] = [
 export const POSTS: readonly Post[] = [...FEATURED_POSTS, ...GENERATED_POSTS].sort((a, b) => a.minutesAgo - b.minutesAgo);
 
 export const STORIES: readonly Story[] = [
-  { id: 's0', petName: 'Tu historia', mine: true },
-  { id: 's1', petName: 'Canela', mine: false },
-  { id: 's2', petName: 'Luna', mine: false },
-  { id: 's3', petName: 'Max', mine: false },
-  { id: 's4', petName: 'Nala', mine: false },
-  { id: 's5', petName: 'Rocky', mine: false },
+  { id: 's0', petName: 'Tu historia', species: 'dog', mine: true },
+  { id: 's1', petName: 'Canela', species: 'dog', mine: false },
+  { id: 's2', petName: 'Luna', species: 'cat', mine: false },
+  { id: 's3', petName: 'Max', species: 'dog', mine: false },
+  { id: 's4', petName: 'Nala', species: 'cat', mine: false },
+  { id: 's5', petName: 'Rocky', species: 'dog', mine: false },
 ];
 
 export const ALERTS: readonly LostAlert[] = [

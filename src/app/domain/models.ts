@@ -56,6 +56,7 @@ export interface ReelVideo {
 export interface Story {
   readonly id: string;
   readonly petName: string;
+  readonly species: Species;
   readonly mine: boolean;
 }
 
