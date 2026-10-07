@@ -35,6 +35,24 @@ export interface Post {
   readonly videoUrl?: string;
 }
 
+/** A video for the reels feed, whichever service it came from. */
+export interface ReelVideo {
+  readonly id: string;
+  /** Seconds. */
+  readonly duration: number;
+  /** A still of the video: shown while it loads. */
+  readonly thumbnail: string;
+  /** What to play. Null for the sample reels, which have no video. */
+  readonly videoUrl: string | null;
+  readonly width: number;
+  readonly height: number;
+  /** Who made it. */
+  readonly user: string;
+  readonly tags: readonly string[];
+  readonly views: number;
+  readonly likes: number;
+}
+
 export interface Story {
   readonly id: string;
   readonly petName: string;
