@@ -23,6 +23,7 @@ import { PlacesRepository } from './data/places/places.repository.ts';
 import { PostsRepository } from './data/posts/posts.repository.ts';
 import { CatApiPhotosRepository } from './data/photos/cat-api-photos.repository.ts';
 import { ChainPetPhotosRepository } from './data/photos/chain-pet-photos.repository.ts';
+import { PixabayPhotosRepository } from './data/photos/pixabay-photos.repository.ts';
 import { DogCeoPhotosRepository } from './data/photos/dog-ceo-photos.repository.ts';
 import { MockPetPhotosRepository } from './data/photos/mock-pet-photos.repository.ts';
 import { PetPhotosRepository } from './data/photos/pet-photos.repository.ts';
@@ -43,13 +44,14 @@ export const appProviders: (Provider | EnvironmentProviders)[] = [
   MockPetPhotosRepository,
   DogCeoPhotosRepository,
   CatApiPhotosRepository,
+  PixabayPhotosRepository,
   {
-    // Dogs come from Dog CEO and cats from The Cat API in the running app; tests and offline
-    // builds get no photos.
+    // In the running app photos come from Pixabay when there is a key, and failing that dogs come
+    // from Dog CEO and cats from The Cat API; tests and offline builds get no photos.
     provide: PetPhotosRepository,
     useFactory: () =>
       inject(LIVE_DATA)
-        ? new ChainPetPhotosRepository([inject(DogCeoPhotosRepository), inject(CatApiPhotosRepository)])
+        ? new ChainPetPhotosRepository([inject(PixabayPhotosRepository), inject(DogCeoPhotosRepository), inject(CatApiPhotosRepository)])
         : inject(MockPetPhotosRepository),
   },
   {
