@@ -80,14 +80,14 @@ import { PostCard } from './post-card.ts';
       @default {
         <virtual-list #list class="fill" [items]="feed.posts()" [estimatedItemHeight]="430" [keyExtractor]="idOf">
           <view listHeader>
-            <view class="stories">
+            <scroll-view class="stories-row" [horizontal]="true" [showsHorizontalScrollIndicator]="false" [contentContainerStyle]="{ gap: 16, paddingHorizontal: 16, paddingTop: 8, paddingBottom: 12 }">
               @for (story of stories(); track story.id) {
                 <view class="story">
                   <app-avatar [name]="story.mine ? '+' : story.petName" [species]="story.mine ? null : story.species" [size]="story.mine ? 74 : 64" [ring]="!story.mine" />
                   <text class="story-name" numberOfLines="2">{{ story.petName }}</text>
                 </view>
               }
-            </view>
+            </scroll-view>
             @if (alerts.nearest(); as nearest) {
               <pressable class="banner" accessibilityRole="button" [accessibilityLabel]="nearest.petName + ' se perdió cerca de ti. Ver alerta'" (press)="nav.push('/alert/' + nearest.id)">
                 <app-icon name="alert" [size]="30" tone="danger" />
@@ -140,6 +140,9 @@ import { PostCard } from './post-card.ts';
       flex-direction: row;
       gap: var(--space-4);
       padding: var(--space-2) var(--space-4) var(--space-3);
+    }
+    .stories-row {
+      flex-grow: 0;
     }
     .story {
       width: 76px;
