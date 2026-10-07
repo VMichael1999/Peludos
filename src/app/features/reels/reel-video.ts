@@ -1,8 +1,12 @@
-import { Component, computed, effect, input, output, untracked } from '@angular/core';
+import { Component, DestroyRef, computed, effect, inject, input, output, untracked } from '@angular/core';
 import { ActivityIndicator, Pressable, View } from '@ng-native/components';
 import { videoPlayer } from '@ng-native/expo/video';
 import { AppIcon } from '../../shared/ui/app-icon.ts';
 import { ExpoVideoView } from '../../shared/ui/expo-video-view.ts';
+
+/** A video that errors is loaded again this many times before it is given up on. */
+const RETRIES = 2;
+const RETRY_AFTER_MS = 700;
 
 /**
  * One reel's video, looping, filling its box. It owns its player, released when the component goes
@@ -58,6 +62,7 @@ export class ReelVideo {
   readonly failed = output<void>();
 
   protected readonly player = videoPlayer(null);
+  private attempts = 0;
   /** What the native view takes in place of the player itself. */
   protected readonly playerId = (this.player.native as unknown as { __expo_shared_object_id__: number }).__expo_shared_object_id__;
 
@@ -69,24 +74,43 @@ export class ReelVideo {
   constructor() {
     const native = this.player.native;
     native.loop = true;
+    let gone = false;
+    inject(DestroyRef).onDestroy(() => (gone = true));
 
     effect(() => {
       native.muted = this.muted();
     });
+    const load = () => {
+      if (gone) return;
+      native.replaceAsync(this.url()).then(
+        () => {
+          if (this.active() && !gone) native.play();
+        },
+        () => undefined,
+      );
+    };
     effect(() => {
-      const url = this.url();
+      this.url();
       untracked(() => {
-        void native.replaceAsync(url).then(() => {
-          if (this.active()) native.play();
-        });
+        this.attempts = 0;
+        load();
       });
     });
     effect(() => {
       if (this.active()) native.play();
       else native.pause();
     });
+    // A video can fail to start once and play at the next try, as Pixabay's CDN does while it has
+    // not yet cached a file, so an error loads the video again before it is reported.
     effect(() => {
-      if (this.player.state().status === 'error') untracked(() => this.failed.emit());
+      const status = this.player.state().status;
+      if (status === 'readyToPlay') this.attempts = 0;
+      if (status !== 'error') return;
+      untracked(() => {
+        if (this.attempts >= RETRIES) return this.failed.emit();
+        this.attempts++;
+        setTimeout(load, RETRY_AFTER_MS);
+      });
     });
   }
 
