@@ -1,9 +1,9 @@
-import { Component, computed, inject, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, viewChild } from '@angular/core';
 import { Pressable, ScrollView, Text, View } from '@ng-native/components';
-import { Location } from '@ng-native/expo/location';
 import { NativeNavigation } from '@ng-native/router';
-import { LIVE_DATA } from '../../core/config.ts';
-import { type Coordinates, alertLocation } from '../../data/alerts/alert-location.ts';
+import { alertLocation } from '../../data/alerts/alert-location.ts';
+import { UserLocation } from '../../data/location/user-location.ts';
+import { PetPortraits } from '../../data/photos/pet-portraits.ts';
 import { ago } from '../../domain/format.ts';
 import type { LostAlert } from '../../domain/models.ts';
 import { AppAlertsMap, type AlertOnMap } from '../../shared/ui/app-alerts-map.ts';
@@ -69,7 +69,7 @@ import { AlertsStore } from './alerts.store.ts';
           <scroll-view class="fill" [contentContainerStyle]="{ paddingBottom: 96 }">
             @for (alert of items(); track alert.id) {
               <pressable class="row" accessibilityRole="button" [accessibilityLabel]="alert.petName + ', ' + alert.breed" (press)="open(alert)">
-                <view class="thumb"><app-photo [tone]="alert.status === 'lost' ? 'blue' : 'warm'" caption="Foto" /></view>
+                <view class="thumb"><app-photo [tone]="alert.status === 'lost' ? 'blue' : 'warm'" [src]="photo(alert)" [alt]="alert.petName" caption="Foto" /></view>
                 <view class="info">
                   <text class="name">{{ alert.petName }} · {{ alert.breed }}</text>
                   <text class="where">{{ alert.status === 'lost' ? 'Visto por última vez en ' : 'Encontrado en ' }}{{ alert.lastSeenAt }}</text>
@@ -185,19 +185,16 @@ export class AlertsPage {
   );
 
   /** Where the person is, once the device says so. Until then, and in tests, the drawn map shows. */
-  protected readonly here = signal<Coordinates | null>(null);
+  protected readonly here = inject(UserLocation).here;
+  private readonly portraits = inject(PetPortraits);
   protected readonly realMap = viewChild(AppAlertsMap);
   protected readonly onMap = computed<AlertOnMap[]>(() => {
     const origin = this.here();
     return origin ? this.items().map((a) => ({ id: a.id, petName: a.petName, status: a.status, location: alertLocation(origin, a) })) : [];
   });
 
-  constructor() {
-    // Only the running app asks the device: a test never reaches for the location.
-    if (!inject(LIVE_DATA)) return;
-    void inject(Location)
-      .current('balanced')
-      .then((position) => position && this.here.set({ latitude: position.latitude, longitude: position.longitude }));
+  protected photo(alert: LostAlert): string | undefined {
+    return this.portraits.portrait(alert.petName, alert.species);
   }
 
   protected tagOf(alert: LostAlert): string {

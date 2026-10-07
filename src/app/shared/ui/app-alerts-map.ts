@@ -38,7 +38,7 @@ const LOOK: Record<AlertStatus, { tintColor: string; systemImage: string }> = {
 })
 export class AppAlertsMap {
   readonly alerts = input.required<readonly AlertOnMap[]>();
-  /** Where the person is: the middle of the map and of the warning radius. */
+  /** The middle of the map and of the radius: the person on the alerts screen, the alert on its own. */
   readonly origin = input.required<{ readonly latitude: number; readonly longitude: number }>();
   readonly radiusKm = input(3);
   readonly height = input(250);
