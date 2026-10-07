@@ -14,7 +14,7 @@ const MAX = 200;
 const REACHABLE = 500;
 const PAGES_TO_DRAW_FROM = 5;
 
-const QUERY: Record<Species, string> = { dog: 'dog', cat: 'cat' };
+const QUERY: Record<Species, string> = { dog: 'dog pet', cat: 'cat pet' };
 
 interface PixabayImage {
   readonly webformatURL?: string;
