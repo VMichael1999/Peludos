@@ -3,6 +3,11 @@
 // the client belong here, and the Google key must be restricted in the Cloud console.
 module.exports = ({ config }) => ({
   ...config,
+  // Android draws its map with Google's SDK, which reads the key from the manifest. iOS uses Apple Maps.
+  android: {
+    ...config.android,
+    config: { ...config.android?.config, googleMaps: { apiKey: process.env.GOOGLE_MAPS_API_KEY ?? '' } },
+  },
   extra: {
     ...config.extra,
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY ?? '',
