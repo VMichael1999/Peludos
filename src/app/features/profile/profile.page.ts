@@ -1,7 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, resource, signal } from '@angular/core';
 import { Pressable, ScrollView, Text, View } from '@ng-native/components';
 import { NativeNavigation } from '@ng-native/router';
 import type { IconName } from '../../core/icons.ts';
+import { HealthRepository } from '../../data/health/health.repository.ts';
+import { PetPortraits } from '../../data/photos/pet-portraits.ts';
 import { compact } from '../../domain/format.ts';
 import { AppAvatar } from '../../shared/ui/app-avatar.ts';
 import { AppButton } from '../../shared/ui/app-button.ts';
@@ -96,13 +98,26 @@ const TABS: readonly { readonly id: ProfileTab; readonly icon: IconName; readonl
 
             @if (tab() === 'health') {
               <view class="health">
-                <text class="meta">El carnet de {{ pet.name }}: vacunas, desparasitación y peso.</text>
+                @if (health.value(); as record) {
+                  <view class="summary">
+                    <text class="summary-small">Próxima vacuna</text>
+                    <text class="summary-title">{{ record.nextVaccine.name }} · en {{ record.nextVaccine.inDays }} días</text>
+                    <text class="meta">{{ record.vaccines.length }} vacunas registradas · {{ record.weightKg }} kg</text>
+                  </view>
+                } @else {
+                  <text class="meta">El carnet de {{ pet.name }}: vacunas, desparasitación y peso.</text>
+                }
                 <app-button label="Abrir carnet de salud" variant="ghost" (press)="nav.push('/health/' + pet.id)" />
               </view>
             } @else {
               <view class="grid">
-                @for (n of tiles; track n) {
-                  <view class="tile"><app-photo [tone]="toneOf(n)" /></view>
+                @for (tile of tiles(); track $index) {
+                  <view class="tile">
+                    <app-photo [tone]="toneOf($index)" [src]="tile" [alt]="'Foto de ' + pet.name" />
+                    @if (tab() === 'reels') {
+                      <view class="play" pointerEvents="none"><app-icon name="play" [size]="22" tone="white" [fillTone]="'white'" /></view>
+                    }
+                  </view>
                 }
               </view>
             }
@@ -204,6 +219,27 @@ const TABS: readonly { readonly id: ProfileTab; readonly icon: IconName; readonl
       gap: var(--space-3);
       padding: var(--space-4);
     }
+    .summary {
+      gap: var(--space-1);
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+      background-color: var(--color-surface-2);
+    }
+    .summary-small {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: var(--color-text-muted);
+    }
+    .summary-title {
+      font-size: var(--text-md);
+      font-weight: 800;
+      color: var(--color-text);
+    }
+    .play {
+      position: absolute;
+      top: var(--space-2);
+      right: var(--space-2);
+    }
     .grid {
       flex-direction: row;
       flex-wrap: wrap;
@@ -222,7 +258,25 @@ export class ProfilePage {
 
   protected readonly tabs = TABS;
   protected readonly tab = signal<ProfileTab>('posts');
-  protected readonly tiles = [1, 2, 3, 4, 5, 6];
+  private readonly portraits = inject(PetPortraits);
+  private readonly healthRepo = inject(HealthRepository);
+
+  protected readonly health = resource({
+    params: () => this.store.current()?.id,
+    loader: ({ params }) => (params ? this.healthRepo.forPet(params) : Promise.resolve(undefined)),
+  });
+
+  /**
+   * The photos of the tab on show: the pet's own, from the pool no portrait uses. Reels show a
+   * different set, with a play badge. Without photos (offline, tests) the tiles are placeholders.
+   */
+  protected readonly tiles = computed<(string | undefined)[]>(() => {
+    const pet = this.store.current();
+    if (!pet) return [];
+    const reels = this.tab() === 'reels';
+    const photos = this.portraits.gallery(pet.name, pet.species, reels ? 6 : 9, reels ? 9 : 0);
+    return photos.length ? photos : Array.from({ length: reels ? 3 : 6 }, () => undefined);
+  });
 
   protected count(value: number): string {
     return compact(value);

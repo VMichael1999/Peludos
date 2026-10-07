@@ -71,6 +71,17 @@ test('a gallery never contains the pet\'s portrait, and is the same each time', 
   expect(portraits.gallery('Canela', 'dog', 9)).toEqual(gallery);
 });
 
+test('a second set of the gallery starts after the first', async () => {
+  const portraits = portraitsWith(new Fake());
+  portraits.portrait('Canela', 'dog');
+  await settle();
+
+  const first = portraits.gallery('Canela', 'dog', 9);
+  const second = portraits.gallery('Canela', 'dog', 6, 9);
+
+  expect(second.filter((photo) => first.includes(photo))).toHaveLength(0);
+});
+
 test('with no photo source there is nothing to show', () => {
   const portraits = portraitsWith();
 

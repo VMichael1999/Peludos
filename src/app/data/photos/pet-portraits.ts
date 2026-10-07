@@ -34,11 +34,14 @@ export class PetPortraits {
     return pool[this.taken.get(key)! % portraits];
   }
 
-  /** `count` photos for a pet's profile, from the part of the pool no portrait uses, the same for the same pet. */
-  gallery(name: string, species: Species, count: number): string[] {
+  /**
+   * `count` photos for a pet's profile, from the part of the pool no portrait uses, the same for the
+   * same pet. `skip` starts that many photos later, so a second set does not repeat the first.
+   */
+  gallery(name: string, species: Species, count: number, skip = 0): string[] {
     const pool = this.pool(species);
     const rest = pool.slice(Math.min(PORTRAITS, pool.length));
-    const from = rest.length ? hash(name) % rest.length : 0;
+    const from = rest.length ? (hash(name) + skip) % rest.length : 0;
     return Array.from({ length: Math.min(count, rest.length) }, (_, i) => rest[(from + i) % rest.length]);
   }
 
