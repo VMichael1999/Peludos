@@ -39,7 +39,7 @@ const FILTERS: readonly { readonly id: PlaceFilter; readonly label: string }[] =
         }
       </scroll-view>
       @if (hasRealMap()) {
-        <app-places-map [height]="190" [places]="places()" (pick)="openById($event)" />
+        <app-places-map [height]="230" [places]="mapPlaces()" (pick)="openById($event)" />
       } @else {
         <app-map-surface [height]="150" [pins]="pins()" [me]="{ x: 46, y: 58 }" />
       }
@@ -189,6 +189,7 @@ export class DirectoryPage {
   });
   /** The native map needs real coordinates: the sample places only have a spot on the drawn one. */
   protected readonly hasRealMap = computed(() => this.places().some((p) => p.location));
+  protected readonly mapPlaces = computed(() => this.places().slice(0, MAP_PINS + 3));
   protected readonly summary = computed(() => {
     if (this.store.results.status() === 'loading') return 'Buscando lugares cerca…';
     const n = this.places().length;
