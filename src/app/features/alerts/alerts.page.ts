@@ -1,8 +1,12 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { Pressable, ScrollView, Text, View } from '@ng-native/components';
+import { Location } from '@ng-native/expo/location';
 import { NativeNavigation } from '@ng-native/router';
+import { LIVE_DATA } from '../../core/config.ts';
+import { type Coordinates, alertLocation } from '../../data/alerts/alert-location.ts';
 import { ago } from '../../domain/format.ts';
 import type { LostAlert } from '../../domain/models.ts';
+import { AppAlertsMap, type AlertOnMap } from '../../shared/ui/app-alerts-map.ts';
 import { AppButton } from '../../shared/ui/app-button.ts';
 import { AppChip } from '../../shared/ui/app-chip.ts';
 import { AppIcon } from '../../shared/ui/app-icon.ts';
@@ -17,14 +21,14 @@ import { AlertsStore } from './alerts.store.ts';
 @Component({
   selector: 'app-alerts-page',
   imports: [
-    AppButton, AppChip, AppIcon, AppIconButton, AppMapSurface, AppPhoto, AppSkeleton, AppState, AppTag, Pressable,
+    AppAlertsMap, AppButton, AppChip, AppIcon, AppIconButton, AppMapSurface, AppPhoto, AppSkeleton, AppState, AppTag, Pressable,
     ScrollView, Text, View,
   ],
   template: `
     <view class="bar">
       <view class="side"></view>
       <text class="title">Alertas</text>
-      <view class="side"><app-icon-button label="Centrar en mi ubicación"><app-icon name="locate" /></app-icon-button></view>
+      <view class="side"><app-icon-button label="Centrar en mi ubicación" (press)="realMap()?.recenter()"><app-icon name="locate" /></app-icon-button></view>
     </view>
     <view class="chips">
       <app-chip label="Perdidas" [selected]="store.tab() === 'lost'" (press)="store.tab.set('lost')" />
@@ -32,7 +36,11 @@ import { AlertsStore } from './alerts.store.ts';
       <app-chip label="Radio 3 km" />
     </view>
 
-    <app-map-surface [height]="250" [pins]="pins()" [me]="{ x: 50, y: 54 }" [radius]="150" />
+    @if (here(); as origin) {
+      <app-alerts-map [alerts]="onMap()" [origin]="origin" [height]="250" (pick)="openById($event)" />
+    } @else {
+      <app-map-surface [height]="250" [pins]="pins()" [me]="{ x: 50, y: 54 }" [radius]="150" />
+    }
 
     <view class="sheet">
       <view class="grabber"></view>
@@ -176,11 +184,31 @@ export class AlertsPage {
     this.items().map((a) => ({ id: a.id, x: a.pin.x, y: a.pin.y, kind: a.status, label: a.petName })),
   );
 
+  /** Where the person is, once the device says so. Until then, and in tests, the drawn map shows. */
+  protected readonly here = signal<Coordinates | null>(null);
+  protected readonly realMap = viewChild(AppAlertsMap);
+  protected readonly onMap = computed<AlertOnMap[]>(() => {
+    const origin = this.here();
+    return origin ? this.items().map((a) => ({ id: a.id, petName: a.petName, status: a.status, location: alertLocation(origin, a) })) : [];
+  });
+
+  constructor() {
+    // Only the running app asks the device: a test never reaches for the location.
+    if (!inject(LIVE_DATA)) return;
+    void inject(Location)
+      .current('balanced')
+      .then((position) => position && this.here.set({ latitude: position.latitude, longitude: position.longitude }));
+  }
+
   protected tagOf(alert: LostAlert): string {
     return alert.status === 'lost' ? `Perdido ${ago(alert.minutesAgo)}` : `¡Encontrado! ${ago(alert.minutesAgo)}`;
   }
 
   protected open(alert: LostAlert): void {
     void this.nav.push('/alert/' + alert.id);
+  }
+
+  protected openById(id: string): void {
+    if (id) void this.nav.push('/alert/' + id);
   }
 }
