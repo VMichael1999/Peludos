@@ -33,6 +33,7 @@
       "expo-font",
       "expo-secure-store",
       "expo-maps",
+      ["expo-build-properties", { "ios": { "deploymentTarget": "18.0" } }],
       [
         "expo-location",
         {
