@@ -38,3 +38,15 @@ test('a reel that is not on screen mounts no video, even if it has one', async (
 
   expect(screen.getByText('Video vertical')).toBeTruthy();
 });
+
+test('shows the poster in place of the placeholder when the reel has one', async () => {
+  await render(ReelCard, { inputs: { post: { ...post, photoUrl: 'https://t.example/a.jpg' }, height: 700 } });
+
+  expect(screen.queryByText('Video vertical')).toBeNull();
+});
+
+test('keeps the placeholder for a reel with no poster or video', async () => {
+  await render(ReelCard, { inputs: { post, height: 700 } });
+
+  expect(screen.getByText('Video vertical')).toBeTruthy();
+});
