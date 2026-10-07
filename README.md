@@ -82,6 +82,12 @@ La vista nativa de video necesita que se le pase el **id** del reproductor (`__e
 
 Pixabay pide, con cariño, mencionar la fuente: cada reel muestra al autor del video.
 
+## Fotos de las mascotas
+
+Con `PIXABAY_API_KEY` (la misma de los reels), las fotos de mascotas vienen de [Pixabay](https://pixabay.com/api/docs/); sin ella, de Dog CEO (perros) y The Cat API (gatos). `PetPortraits` reparte un retrato por mascota, **el mismo en todas las pantallas**: historias, publicaciones, reels, perfil, selector de mascotas y alertas. Cada nombre toma el siguiente retrato libre de un conjunto que se pide una vez por especie, y la galería del perfil sale del resto del conjunto, así el retrato no se repite en su galería. Las fotos son aleatorias y no coinciden con la raza escrita (una «Golden retriever» puede salir como otra raza); el retrato dura lo que dura la sesión.
+
+El perfil muestra la galería de la mascota, sus reels (con una insignia de reproducción) y un resumen de salud con la próxima vacuna.
+
 ## Arquitectura
 
 ```
@@ -116,14 +122,16 @@ Todo está en [`docs/`](docs): el [plan de acción](docs/plan-de-accion.md), la 
 - [ ] Selector de fotos y cámara al crear publicaciones
 - [x] Mapa nativo (Apple Maps en iOS) en el directorio de tiendas
 - [x] Mapa nativo también en Alertas
-- [ ] Mapa nativo en el detalle de una alerta y al reportar una
+- [x] Fotos de mascotas en historias, perfil, publicaciones y alertas
+- [x] Mapa nativo en el detalle de una alerta
+- [ ] Mapa nativo al reportar una alerta
 - [ ] Backend real, con tiendas afiliadas y catálogo propio
 - [ ] Comentarios, chat con tiendas y notificaciones push
 - [ ] Editar perfil y añadir mascotas
 
 ## Créditos
 
-Los videos de los reels vienen de [Pixabay](https://pixabay.com) y cada reel muestra a su autor. Las fotos de ejemplo vienen de [Dog CEO](https://dog.ceo/dog-api) (perros) y de [The Cat API](https://thecatapi.com) (gatos), dos APIs gratuitas que no piden clave para un uso ligero. Son contenido de terceros y solo se usan para llenar el prototipo; en producción las fotos son las que suben los usuarios.
+Los videos de los reels y, con clave, las fotos de mascotas vienen de [Pixabay](https://pixabay.com); cada reel muestra a su autor. Las fotos de respaldo vienen de [Dog CEO](https://dog.ceo/dog-api) (perros) y de [The Cat API](https://thecatapi.com) (gatos), dos APIs gratuitas que no piden clave para un uso ligero. Son contenido de terceros y solo se usan para llenar el prototipo; en producción las fotos son las que suben los usuarios.
 
 ## Licencia
 
