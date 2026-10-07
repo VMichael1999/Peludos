@@ -25,14 +25,14 @@ El diseño completo, pantalla por pantalla, está en [`docs/pantallas.html`](doc
 
 ## Empezar
 
-Necesitas Node 22 (con el que se desarrolló) y, para ver la app, la app **Expo Go** en tu teléfono o un simulador de iOS o Android.
+Necesitas Node 22 (con el que se desarrolló) y un simulador de iOS o Android. La mayoría de pantallas corren en **Expo Go**; el mapa nativo necesita la app de desarrollo (`npx expo run:ios`, con Xcode y CocoaPods).
 
 ```sh
 git clone https://github.com/VMichael1999/Peludos.git
 cd Peludos
 npm install
 cp .env.example .env     # opcional: ver "Mapas y ubicación"
-npm start                # luego pulsa i (iOS) o a (Android), o escanea el QR con Expo Go
+npm start                # Metro; para el mapa nativo y los reels hace falta la app de desarrollo (ver abajo)
 ```
 
 Otros comandos:
@@ -54,6 +54,14 @@ Sin configurar nada, la app muestra lugares de ejemplo y lo dice en pantalla. Pa
 
 La clave viaja dentro de la app, así que **restríngela** en Google Cloud a las APIs que uses. En producción, lo seguro es pasar las llamadas por un servidor propio. Mientras pruebas en Expo Go, no la restrinjas por bundle ID de iOS: Expo Go tiene el suyo.
 
+### Mapa nativo
+
+El directorio usa el mapa real, `expo-maps`: Apple Maps en iOS (sin clave) y Google Maps en Android (con `GOOGLE_MAPS_API_KEY`). Muestra los 15 lugares más cercanos con un color por tipo (veterinaria, tienda, peluquería) y tu posición; tocar un marcador abre el lugar. Sin coordenadas reales (lugares de ejemplo) o en Expo Go, que no incluye el módulo, se queda el mapa dibujado.
+
+- Exige **iOS 18** o superior, que ya está en `app.json` (`expo-build-properties`).
+- `expo run:ios` falla si la ruta del proyecto tiene **espacios** (por ejemplo `Angular Native`): un script de Expo no las entrecomilla. Compila desde una ruta sin espacios.
+- Con CocoaPods en Ruby 2.6, exporta `LANG=en_US.UTF-8` antes de `pod install`.
+
 ## Videos de los reels
 
 Los reels se reproducen con `expo-video` y sus videos verticales vienen de [Pexels](https://www.pexels.com/api/) (clave gratuita, 200 peticiones por hora). Sin clave, cada reel conserva su marcador oscuro.
@@ -63,7 +71,7 @@ Los reels se reproducen con `expo-video` y sus videos verticales vienen de [Pexe
 
 Pexels pide un enlace visible a su sitio donde se muestren sus videos.
 
-**Estado conocido:** el reproductor carga y reproduce (`readyToPlay`, `playing`), pero en Expo Go la vista nativa de video no dibuja el cuadro. Probablemente haga falta un build de desarrollo (`npx expo run:ios`); está sin verificar. Mientras tanto, usa Pexels solo si quieres probarlo, porque el audio podría sonar sin imagen.
+**Estado conocido:** el reproductor carga y reproduce (`readyToPlay`, `playing`), pero la vista nativa de video no dibuja el cuadro, ni en Expo Go ni en un build de desarrollo (verificado en iOS 26.5). El mismo video sí se ve en Safari del simulador, así que el fallo está en cómo la vista `<expo-video>` recibe el reproductor. Pendiente de reportar a `@ng-native/expo`.
 
 ## Arquitectura
 
@@ -96,7 +104,7 @@ Todo está en [`docs/`](docs): el [plan de acción](docs/plan-de-accion.md), la 
 
 - [x] Fotos reales de perros (Dog CEO) y de gatos (The Cat API) detrás de un repositorio
 - [x] Videos para los reels desde Pexels, con clave opcional (ver "Videos de los reels")
-- [ ] Verificar la reproducción de video en un build de desarrollo: en Expo Go la vista no dibuja
+- [ ] Que la vista de video dibuje el cuadro (reproduce, pero no se ve)
 - [ ] Selector de fotos y cámara al crear publicaciones
 - [ ] Mapa nativo en lugar del mapa dibujado
 - [ ] Backend real, con tiendas afiliadas y catálogo propio
