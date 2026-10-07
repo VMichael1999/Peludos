@@ -64,14 +64,23 @@ El directorio usa el mapa real, `expo-maps`: Apple Maps en iOS (sin clave) y Goo
 
 ## Videos de los reels
 
-Los reels se reproducen con `expo-video` y sus videos verticales vienen de [Pexels](https://www.pexels.com/api/) (clave gratuita, 200 peticiones por hora). Sin clave, cada reel conserva su marcador oscuro.
+Los reels son un feed vertical de videos de mascotas de [Pixabay](https://pixabay.com/api/docs/) (clave gratuita, 100 peticiones por minuto), con categorías (Perros, Gatos, Cachorros, Gatitos, Mascotas, Animales, Divertidos). Sin clave se ven reels de ejemplo sin video.
 
-1. Crea una clave en <https://www.pexels.com/api/> y guárdala en `.env` como `PEXELS_API_KEY`.
-2. Reinicia Metro con `npx expo start --clear`.
+1. Crea una clave en <https://pixabay.com/api/docs/> y guárdala en `.env` como `PIXABAY_API_KEY` (el archivo no se versiona).
+2. Reinicia Metro con `npx expo start --clear` y **recompila la app de desarrollo** (`npx expo run:ios`): la clave se incorpora a la configuración al compilar.
 
-Pexels pide un enlace visible a su sitio donde se muestren sus videos.
+Cómo funciona:
 
-**Estado conocido:** el reproductor carga y reproduce (`readyToPlay`, `playing`), pero la vista nativa de video no dibuja el cuadro, ni en Expo Go ni en un build de desarrollo (verificado en iOS 26.5). El mismo video sí se ve en Safari del simulador, así que el fallo está en cómo la vista `<expo-video>` recibe el reproductor. Pendiente de reportar a `@ng-native/expo`.
+- **Un video a la vez.** Solo el reel en pantalla se reproduce (en bucle); se pausa al salir. El siguiente se carga en pausa para empezar al instante, y el resto no tiene reproductor.
+- **Toque** pausa y reanuda. **El sonido** se silencia con el botón de arriba y se mantiene al navegar.
+- **Paginación** de 10 en 10, pidiendo la siguiente cuando quedan 3 por delante, sin peticiones repetidas. Se manejan la primera carga, la carga de más páginas, el error con «Reintentar», la respuesta vacía y el fin de resultados. Los mensajes son en lenguaje llano: nunca muestran la clave ni detalles técnicos.
+- **Calidad:** de las que ofrece Pixabay se elige una vertical si existe y, si no, la más ligera con lado corto de al menos 720 px.
+- **Reintento automático:** el CDN de Pixabay a veces falla al primer intento con un archivo que aún no tiene en caché; el reproductor lo carga de nuevo hasta dos veces antes de mostrar el error.
+- **Cambiar la búsqueda** es editar `REEL_CATEGORIES` en `reels.store.ts`; la pantalla no conoce la API ni la clave (`VideoFeedRepository` es el puerto, `PixabayVideoFeedRepository` el adaptador).
+
+La vista nativa de video necesita que se le pase el **id** del reproductor (`__expo_shared_object_id__`), no el reproductor: así lo hace el propio `expo-video` en React. Con el objeto, la vista queda en blanco aunque el audio suene.
+
+Pixabay pide, con cariño, mencionar la fuente: cada reel muestra al autor del video.
 
 ## Arquitectura
 
@@ -103,17 +112,17 @@ Todo está en [`docs/`](docs): el [plan de acción](docs/plan-de-accion.md), la 
 ## Hoja de ruta
 
 - [x] Fotos reales de perros (Dog CEO) y de gatos (The Cat API) detrás de un repositorio
-- [x] Videos para los reels desde Pexels, con clave opcional (ver "Videos de los reels")
-- [ ] Que la vista de video dibuje el cuadro (reproduce, pero no se ve)
+- [x] Feed de reels con videos de Pixabay: categorías, paginación, sonido y precarga (ver "Videos de los reels")
 - [ ] Selector de fotos y cámara al crear publicaciones
-- [ ] Mapa nativo en lugar del mapa dibujado
+- [x] Mapa nativo (Apple Maps en iOS) en el directorio de tiendas
+- [ ] Mapa nativo también en Alertas
 - [ ] Backend real, con tiendas afiliadas y catálogo propio
 - [ ] Comentarios, chat con tiendas y notificaciones push
 - [ ] Editar perfil y añadir mascotas
 
 ## Créditos
 
-Las fotos de ejemplo vienen de [Dog CEO](https://dog.ceo/dog-api) (perros) y de [The Cat API](https://thecatapi.com) (gatos), dos APIs gratuitas que no piden clave para un uso ligero. Son contenido de terceros y solo se usan para llenar el prototipo; en producción las fotos son las que suben los usuarios.
+Los videos de los reels vienen de [Pixabay](https://pixabay.com) y cada reel muestra a su autor. Las fotos de ejemplo vienen de [Dog CEO](https://dog.ceo/dog-api) (perros) y de [The Cat API](https://thecatapi.com) (gatos), dos APIs gratuitas que no piden clave para un uso ligero. Son contenido de terceros y solo se usan para llenar el prototipo; en producción las fotos son las que suben los usuarios.
 
 ## Licencia
 
