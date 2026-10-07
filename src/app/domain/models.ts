@@ -60,6 +60,16 @@ export interface Story {
   readonly mine: boolean;
 }
 
+/** One page of a story: a photo or a video, shown for a few seconds. */
+export interface StoryItem {
+  readonly id: string;
+  readonly kind: 'photo' | 'video';
+  readonly url: string;
+  readonly caption: string;
+  /** How long it stays on screen before the next one. */
+  readonly seconds: number;
+}
+
 export type AlertStatus = 'lost' | 'found';
 
 export interface Sighting {
