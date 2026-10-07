@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import type { Species } from '../../domain/models.ts';
 import { PetPhotosRepository } from './pet-photos.repository.ts';
 
 const API = 'https://dog.ceo/api/breeds/image/random';
@@ -20,15 +21,16 @@ export function parseDogCeo(response: DogCeoResponse | null | undefined): string
 
 /**
  * Random dog photos from [Dog CEO](https://dog.ceo/dog-api): free, no key. It is best-effort, so a
- * network failure answers with no photos and never an error.
+ * network failure answers with no photos and never an error. It only has dogs: any other species is
+ * answered with nothing, without a request.
  */
 @Injectable()
 export class DogCeoPhotosRepository extends PetPhotosRepository {
   private readonly http = inject(HttpClient);
 
-  async dogs(count: number): Promise<string[]> {
+  async photos(species: Species, count: number): Promise<string[]> {
     const wanted = Math.min(MAX, Math.floor(count));
-    if (wanted < 1) return [];
+    if (species !== 'dog' || wanted < 1) return [];
     try {
       return parseDogCeo(await firstValueFrom(this.http.get<DogCeoResponse>(`${API}/${wanted}`)));
     } catch {
